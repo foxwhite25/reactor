@@ -42,4 +42,7 @@ export const reload = async (reset = false): Promise<void> => {
 
     htmlInserts();
     constantIntervals();
+    if (reset) {
+        return
+    }
 };

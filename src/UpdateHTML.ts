@@ -2,7 +2,7 @@ import { player } from '@/Reactor';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { format } from '@/Utils';
 
-export const htmlInserts = () => {
+export const htmlInserts = (): void => {
     // ALWAYS Update these, for they are the most important resources
     const playerRequirements = ['money'] as const;
     const domRequirements = ['moneyDisplay'] as const;
