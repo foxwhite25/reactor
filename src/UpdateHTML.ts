@@ -1,6 +1,7 @@
 import { player } from '@/Reactor';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { format } from '@/Utils';
+import { Globals } from '@/Variables';
 
 export const htmlInserts = (): void => {
     // ALWAYS Update these, for they are the most important resources
@@ -10,7 +11,11 @@ export const htmlInserts = (): void => {
         const text = format(player[`${playerRequirements[i]}` as const]);
         const dom = DOMCacheGetOrSet(`${domRequirements[i]}` as const);
         if (dom.textContent !== text) {
-            dom.textContent = text;
+            if (playerRequirements[i] == 'power') {
+                dom.textContent = `${text} / ${format(Globals.maxPower)}`
+            } else {
+                dom.textContent = text;
+            }
         }
     }
 

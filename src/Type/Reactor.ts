@@ -15,6 +15,8 @@ export interface Player {
 }
 
 export interface GlobalVariables {
+  maxPower: Decimal
+
   currentTab: Tabs;
 }
 

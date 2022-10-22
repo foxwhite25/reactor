@@ -3,6 +3,7 @@ import { clearTimers } from '@/Timers';
 import { Player } from '@/Type/Reactor';
 import Decimal from 'break_infinity.js';
 import { htmlInserts } from '@/UpdateHTML';
+import { Globals } from '@/Variables';
 
 export const player: Player = {
     firstPlayed: new Date().toISOString(),
@@ -20,8 +21,8 @@ window.addEventListener('load', () => {
 export const updateAll = (): void => {
     player.money = player.money.add(1);
     player.power = player.power.add(1);
-    if (player.power.greaterThan(500)) {
-        player.power = new Decimal(500)
+    if (player.power.greaterThan(Globals.maxPower)) {
+        player.power = Globals.maxPower
     }
 };
 

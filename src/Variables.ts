@@ -1,4 +1,5 @@
 import { GlobalVariables } from '@/Type/Reactor';
+import Decimal from 'break_infinity.js';
 
 export enum Tabs {
   Buildings,
@@ -8,6 +9,7 @@ export enum Tabs {
 }
 
 export const Globals: GlobalVariables = {
+    maxPower: new Decimal(500),
     currentTab: Tabs.Buildings,
 };
 

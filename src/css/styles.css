@@ -117,7 +117,7 @@ textarea {
     display: flex;
     align-items: center;
     width: calc(38px + 7.5em);
-    min-width: 100%;
+    min-width: 75%;
 }
 
 .progressbar {
@@ -125,7 +125,7 @@ textarea {
     width: 100%;
     max-width: 500px;
     height: 30px;
-    margin: 0 auto;
+    margin: 0;
     overflow: hidden;
     background-color: var(--frontground-color);
 }
@@ -137,7 +137,7 @@ textarea {
     left: 0;
     width: 0;
     background: var(--cyan-color);
-    transition: all 0.3s;
+    transition: all 0.1s;
 }
 
 #money-display { color: var(--yellow-color); }
@@ -163,4 +163,18 @@ a:hover {
 
 a:visited {
     color: white;
+}
+
+#sell-power-button {
+    min-width: 150px;
+    min-height: 30px;
+    color: var(--foreground-color);
+    background-color: var(--background-color);
+    border: var(--cyan-color);
+    border-style: solid;
+    border-radius: 1px;
+}
+
+#sell-power-button:hover {
+    background-color: var(--frontground-color);
 }
