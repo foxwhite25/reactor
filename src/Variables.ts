@@ -5,6 +5,7 @@ export enum Tabs {
   Buildings,
   Upgrades,
   Research,
+  Setting,
   Area,
 }
 

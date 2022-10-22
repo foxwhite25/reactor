@@ -1,9 +1,10 @@
 import { generateEventHandlers } from '@/EventListener';
-import { clearTimers } from '@/Timers';
+import { clearTimers, setInterval } from '@/Timers';
 import { Player } from '@/Type/Reactor';
 import Decimal from 'break_infinity.js';
 import { htmlInserts } from '@/UpdateHTML';
-import { Globals } from '@/Variables';
+import { Globals, Tabs } from '@/Variables';
+import { toggleTabs } from '@/Toggles';
 
 export const player: Player = {
     firstPlayed: new Date().toISOString(),
@@ -47,6 +48,7 @@ export const reload = async (reset = false): Promise<void> => {
     });
 
     htmlInserts();
+    toggleTabs(Tabs.Buildings);
     constantIntervals();
     if (reset) {
         return;

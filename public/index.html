@@ -26,7 +26,7 @@
     <div class='sub-header'>
         <div class='currencies-container'>
             <div class='currency-container'>
-                <div>Money: </div>
+                <div class='tooltip'>Money: <span class="tooltip-text">Tooltip text</span></div>
                 <div class='stat-display' id='money-display'></div>
             </div>
             <div class='currency-container'>
@@ -50,8 +50,40 @@
                 <button id='sell-power-button'>Sell Power!</button>
             </div>
         </div>
+        <div class='description-container'>
+            <div class='description-title-container'>
+                Description:
+            </div>
+            <div id='description-content'>
+                Hover on something to see it's description here.
+                Alsd
+                asdad
+            </div>
+        </div>
     </div>
+    <nav class="navbar">
+        <div id="tab-row">
+            <button id="buildings-tab">Buildings</button>
+            <button id="upgrade-tab">Upgrades</button>
+            <button id="research-tab">Researches</button>
+            <button id="setting-tab">Settings</button>
+        </div>
+    </nav>
+
 </header>
+<div id="tab-border" style="background-color: var(--yellow-color);"></div>
+<div id='buildings'>
+    Hello I am buildings
+</div>
+<div id='upgrades'>
+    Hello I am upgrades
+</div>
+<div id='researches'>
+    Hello I am researches
+</div>
+<div id='settings'>
+    Hello I am settings
+</div>
 <!-- Root end -->
 </body>
 </html>

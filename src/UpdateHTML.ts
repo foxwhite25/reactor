@@ -1,7 +1,61 @@
 import { player } from '@/Reactor';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { format } from '@/Utils';
-import { Globals } from '@/Variables';
+import { Globals, Tabs } from '@/Variables';
+import { visualUpdateBuildings } from '@/UpdateTabs';
+
+export const hideStuff = () :void => {
+    DOMCacheGetOrSet('buildings').style.display = 'none'
+    DOMCacheGetOrSet('buildings-tab').style.color = 'var(--foreground-color)'
+    DOMCacheGetOrSet('buildings-tab').style.backgroundColor = '';
+
+    DOMCacheGetOrSet('upgrades').style.display = 'none'
+    DOMCacheGetOrSet('upgrade-tab').style.color = 'var(--foreground-color)'
+    DOMCacheGetOrSet('upgrade-tab').style.backgroundColor = ''
+
+    DOMCacheGetOrSet('researches').style.display = 'none'
+    DOMCacheGetOrSet('research-tab').style.color = 'var(--foreground-color)'
+    DOMCacheGetOrSet('research-tab').style.backgroundColor = ''
+
+    DOMCacheGetOrSet('settings').style.display = 'none'
+    DOMCacheGetOrSet('setting-tab').style.color = 'var(--foreground-color)'
+    DOMCacheGetOrSet('setting-tab').style.backgroundColor = ''
+
+    const tab = DOMCacheGetOrSet('tab-border');
+
+    if (Globals.currentTab == Tabs.Buildings) {
+        tab.style.backgroundColor = 'var(--cyan-color)';
+        DOMCacheGetOrSet('buildings-tab').style.color = 'var(--background-color)'
+        DOMCacheGetOrSet('buildings-tab').style.backgroundColor = 'var(--cyan-color)';
+        DOMCacheGetOrSet('buildings').style.display = 'block'
+    }
+    if (Globals.currentTab == Tabs.Upgrades) {
+        tab.style.backgroundColor = 'var(--yellow-color)';
+        DOMCacheGetOrSet('upgrade-tab').style.color = 'var(--background-color)'
+        DOMCacheGetOrSet('upgrade-tab').style.backgroundColor = 'var(--yellow-color)';
+        DOMCacheGetOrSet('upgrades').style.display = 'block'
+    }
+    if (Globals.currentTab == Tabs.Research) {
+        tab.style.backgroundColor = 'var(--purple-color)'
+        DOMCacheGetOrSet('research-tab').style.color = 'var(--background-color)'
+        DOMCacheGetOrSet('research-tab').style.backgroundColor = 'var(--purple-color)';
+        DOMCacheGetOrSet('researches').style.display = 'block'
+    }
+    if (Globals.currentTab == Tabs.Setting) {
+        tab.style.backgroundColor = 'var(--green-color)'
+        DOMCacheGetOrSet('setting-tab').style.color = 'var(--background-color)'
+        DOMCacheGetOrSet('setting-tab').style.backgroundColor = 'var(--green-color)';
+        DOMCacheGetOrSet('settings').style.display = 'block'
+    }
+}
+
+const visualTab: Record<typeof Globals.currentTab, () => void> = {
+    0:visualUpdateBuildings,
+    1:visualUpdateBuildings,
+    2:visualUpdateBuildings,
+    3:visualUpdateBuildings,
+    4:visualUpdateBuildings,
+};
 
 export const htmlInserts = (): void => {
     // ALWAYS Update these, for they are the most important resources
@@ -20,4 +74,5 @@ export const htmlInserts = (): void => {
     }
 
     DOMCacheGetOrSet('power-bar').style.width = `${player.power.div(5)}%`
+    visualTab[Globals.currentTab]()
 };
