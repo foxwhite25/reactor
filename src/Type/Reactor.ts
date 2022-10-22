@@ -7,6 +7,7 @@ export interface Player {
   money: Decimal;
   power: Decimal;
   research: Decimal;
+  flame: Decimal;
 
   setting: {
     theme: string;

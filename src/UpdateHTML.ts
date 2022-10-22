@@ -4,8 +4,8 @@ import { format } from '@/Utils';
 
 export const htmlInserts = (): void => {
     // ALWAYS Update these, for they are the most important resources
-    const playerRequirements = ['money'] as const;
-    const domRequirements = ['moneyDisplay'] as const;
+    const playerRequirements = ['money', 'power', 'research', 'flame'] as const;
+    const domRequirements = ['money-display', 'power-display', 'research-display', 'flame-display'] as const;
     for (let i = 0; i < playerRequirements.length; i++) {
         const text = format(player[`${playerRequirements[i]}` as const]);
         const dom = DOMCacheGetOrSet(`${domRequirements[i]}` as const);
@@ -13,4 +13,6 @@ export const htmlInserts = (): void => {
             dom.textContent = text;
         }
     }
+
+    DOMCacheGetOrSet('power-bar').style.width = `${player.power.div(5)}%`
 };

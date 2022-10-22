@@ -1,8 +1,10 @@
 module.exports = {
   extends: ['stylelint-config-standard', 'stylelint-config-recess-order'],
   rules: {
-    'selector-max-id': 0,
+    'indentation': 4,
+    'selector-max-id': 1,
     'string-quotes': 'single',
+    'declaration-block-no-redundant-longhand-properties': null,
     'at-rule-no-unknown': [
       true,
       {

@@ -17,7 +17,7 @@ const entry = [`${paths.src}/Reactor.ts`, `${paths.src}/css/styles.css`];
  * Set output file name and path.
  */
 const output = {
-    publicPath: '/reactor/',
+    publicPath: '',
     path: paths.dist,
     filename: config.JS_FILE_OUTPUT,
 };

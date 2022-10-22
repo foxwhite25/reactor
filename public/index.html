@@ -1,32 +1,54 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
-  <!-- Meta Tags -->
-  <meta charset='UTF-8' />
-  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-  <meta http-equiv='X-UA-Compatible' content='ie=edge' />
+    <!-- Meta Tags -->
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta http-equiv='X-UA-Compatible' content='ie=edge' />
 
-  <!-- Favicon -->
-  <link rel='icon' href='/favicon.ico' type='image/x-icon' />
-  <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon' />
+    <!-- Favicon -->
+    <link rel='icon' href='/favicon.ico' type='image/x-icon' />
+    <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon' />
 
-  <!-- Title -->
-  <title>TypeScript Webpack Boilerplate</title>
+    <!-- Title -->
+    <title>TypeScript Webpack Boilerplate</title>
 </head>
 
-<body>
+<body class='body-color'>
 <!-- No script message -->
 <noscript>
-  This website will not work without JavaScript, please enable JavaScript to view.
+    This website will not work without JavaScript, please enable JavaScript to view.
 </noscript>
 <!-- No script message end -->
 
 <!-- Root -->
-<div id='root' class='root'>
-  <button id='button'>Hello</button>
-  <div>Money:</div>
-  <div id='moneyDisplay'></div>
-</div>
+<header>
+    <div class='sub-header'>
+        <div class='currencies-container'>
+            <div class='currency-container'>
+                <div>Money: </div>
+                <div class='stat-display' id='money-display'></div>
+            </div>
+            <div class='currency-container'>
+                <div>Power: </div>
+                <div class='stat-display' id='power-display'></div>
+            </div>
+            <div class='currency-container'>
+                <div>Research: </div>
+                <div class='stat-display' id='research-display'></div>
+            </div>
+            <div class='currency-container'>
+                <div>Flame: </div>
+                <div class='stat-display' id='flame-display'></div>
+            </div>
+            <div class='power-bar-container'>
+                <div class='progressbar'>
+                    <div id='power-bar'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 <!-- Root end -->
 </body>
 </html>

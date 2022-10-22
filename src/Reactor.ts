@@ -9,6 +9,7 @@ export const player: Player = {
     money: new Decimal(0),
     research: new Decimal(0),
     power: new Decimal(0),
+    flame: new Decimal(0),
 } as Player;
 
 window.addEventListener('load', () => {
@@ -18,6 +19,10 @@ window.addEventListener('load', () => {
 
 export const updateAll = (): void => {
     player.money = player.money.add(1);
+    player.power = player.power.add(1);
+    if (player.power.greaterThan(500)) {
+        player.power = new Decimal(500)
+    }
 };
 
 export const fastUpdates = (): void => {
@@ -43,6 +48,6 @@ export const reload = async (reset = false): Promise<void> => {
     htmlInserts();
     constantIntervals();
     if (reset) {
-        return
+        return;
     }
 };
