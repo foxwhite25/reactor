@@ -12,9 +12,9 @@ jobs:
         with:
           persist-credentials: false
       - name: Install deps
-        run: npm install --force
+        run: yarn install
       - name: Build
-        run: npm run build
+        run: yarn build
       - name: Deploy with the $GME emoji for some reason 🚀
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
