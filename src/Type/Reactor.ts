@@ -15,6 +15,9 @@ export interface Player {
 }
 
 export interface GlobalVariables {
+  mapWidth: number,
+  mapHeight: number,
+
   maxPower: Decimal
 
   currentTab: Tabs;

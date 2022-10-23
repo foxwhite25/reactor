@@ -50,6 +50,7 @@ body::-webkit-scrollbar:horizontal {
 
 body {
     margin: 0;
+    overflow: hidden;
 
     --background-color: #282a36;
     --frontground-color: #44475a;
@@ -335,4 +336,30 @@ button:active {
 
 .unused {
     display: none;
+}
+
+#buildings-map-container {
+    box-sizing: border-box;
+    margin: 20px;
+    color: var(--foreground-color);
+    text-align: center;
+    border: 1px solid var(--cyan-color);
+}
+
+#map-table-container {
+    z-index: 1;
+    box-sizing: border-box;
+    display: flex;
+    margin: 20px;
+    font-size: 0;
+}
+
+#map-table {
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.map-table-cell {
+    cursor: pointer;
+    background-color: #bd93f9;
 }

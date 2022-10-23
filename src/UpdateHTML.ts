@@ -3,6 +3,27 @@ import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { format } from '@/Utils';
 import { Globals, Tabs } from '@/Variables';
 import { visualUpdateBuildings } from '@/UpdateTabs';
+import { GetBuyBuildingFunction } from '@/Buildings';
+
+export const setupMapTable = ():void => {
+    const table = document.getElementById('map-table') as HTMLTableElement | null
+    if (!table) {
+        throw new TypeError('Element with id "map-table" was not found on page?');
+    }
+    table.style.width = `${Globals.mapWidth * 32}px`
+    table.style.height = `${Globals.mapHeight * 32}px`
+
+    for (let i = 0; i < Globals.mapHeight; i++) {
+        const row = table.insertRow()
+        row.id = `map-row${i}`
+        for (let j = 0; j < Globals.mapWidth; j++) {
+            const cell = row.insertCell()
+            cell.id = `map-cell-${i}-${j}`
+            cell.className = 'map-table-cell'
+            cell.addEventListener('click', GetBuyBuildingFunction(i, j))
+        }
+    }
+}
 
 export const hideStuff = () :void => {
     DOMCacheGetOrSet('buildings').style.display = 'none'
@@ -31,7 +52,7 @@ export const hideStuff = () :void => {
         tab.style.backgroundColor = 'var(--cyan-color)';
         DOMCacheGetOrSet('buildings-tab').style.color = 'var(--background-color)'
         DOMCacheGetOrSet('buildings-tab').style.backgroundColor = 'var(--cyan-color)';
-        DOMCacheGetOrSet('buildings').style.display = 'block'
+        DOMCacheGetOrSet('buildings').style.display = 'flex'
     }
     if (Globals.currentTab == Tabs.Upgrades) {
         tab.style.backgroundColor = 'var(--yellow-color)';

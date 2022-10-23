@@ -2,7 +2,7 @@ import { generateEventHandlers } from '@/EventListener';
 import { clearTimers, setInterval } from '@/Timers';
 import { Player } from '@/Type/Reactor';
 import Decimal from 'break_infinity.js';
-import { htmlInserts } from '@/UpdateHTML';
+import { htmlInserts, setupMapTable } from '@/UpdateHTML';
 import { Globals, Tabs } from '@/Variables';
 import { toggleTabs } from '@/Toggles';
 
@@ -15,7 +15,9 @@ export const player: Player = {
 } as Player;
 
 window.addEventListener('load', () => {
+    setupMapTable();
     generateEventHandlers();
+
     void reload();
 });
 

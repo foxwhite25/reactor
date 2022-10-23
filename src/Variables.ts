@@ -10,7 +10,11 @@ export enum Tabs {
 }
 
 export const Globals: GlobalVariables = {
+    mapWidth: 34,
+    mapHeight: 17,
+
     maxPower: new Decimal(500),
+
     currentTab: Tabs.Buildings,
 };
 
