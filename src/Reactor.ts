@@ -33,7 +33,7 @@ window.addEventListener('load', () => {
 export const updateAll = (): void => {
     player.buildings.forEach((row) => {
         row.forEach((building)=>{
-            building.tick()
+            Globals.buildingTickFunctions[building.buildingType]()
         })
     })
 

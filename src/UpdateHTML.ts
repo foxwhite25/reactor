@@ -1,7 +1,7 @@
 import { player } from '@/Reactor';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { format } from '@/Utils';
-import { Buildings, Globals, Tabs } from '@/Variables';
+import { Globals, Tabs } from '@/Variables';
 import { visualUpdateBuildings } from '@/UpdateTabs';
 import { BuyBuilding } from '@/Buildings';
 
@@ -120,12 +120,12 @@ export const htmlInserts = (): void => {
 
 const updateCellDescription = (row: number, col: number) => {
     const building = player.buildings[row][col]
-    if (building.buildingType == Buildings.Null) {
-        return
-    }
-    updateDescription(building.description(building))
+    const r = Globals.buildingDescriptionFunctions[building.buildingType](building)
+    console.log(r)
+    updateDescription(r.description, r.title)
 }
 
-const updateDescription = (description: string):void => {
+const updateDescription = (description: string, title: string):void => {
+    DOMCacheGetOrSet('description-title').innerText = title
     DOMCacheGetOrSet('description-content').innerHTML = description
 }

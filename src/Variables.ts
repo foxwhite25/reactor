@@ -33,9 +33,15 @@ export const Globals: GlobalVariables = {
     },
 
     buildingDescriptionFunctions: {
-        '': () => '',
-        'turbine': (b) => `Produce <span style='color: var(--cyan-color)'>1</span> power. <br>Durability: ${b.durability}/30`,
-        'solar-panel': () => 'Foo bar test test',
+        '': () => {
+            return {title: 'Empty Tile', description: 'You can add components to this tile.'}
+        },
+        'turbine': (b) => {
+            return {title: 'Wind Turbine', description: `Produce <span style='color:var(--cyan-color)'>1</span> power. <br>Durability: ${b.durability}/30`}
+        },
+        'solar-panel': () => {
+            return {title: 'Solar Panel', description: 'Foo bar lorem ipsum test test 123 123'};
+        },
     },
 
     maxPower: new Decimal(500),

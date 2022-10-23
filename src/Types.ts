@@ -23,8 +23,6 @@ export interface BuildingInstance {
     heat: Decimal;
     water: Decimal;
     durability: Decimal;
-    description: (b: BuildingInstance) => string;
-    tick: () => void;
 }
 
 export interface GlobalVariables {
@@ -32,7 +30,7 @@ export interface GlobalVariables {
     mapHeight: number,
 
     buildingTickFunctions: Record<typeof Globals.holdBuilding, ()=>void>
-    buildingDescriptionFunctions: Record<typeof Globals.holdBuilding, (b: BuildingInstance)=>string>
+    buildingDescriptionFunctions: Record<typeof Globals.holdBuilding, (b: BuildingInstance)=> {title: string, description: string}>
     maxPower: Decimal
     holdBuilding: Buildings
 
