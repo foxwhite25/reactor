@@ -286,3 +286,53 @@ button:active {
 #research-tab { border-color: var(--purple-color); }
 #map-tab { border-color: var(--green-color); }
 #setting-tab { border-color: var(--orange-color); }
+
+#buildings {
+    align-items: start;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+#buildings-component-container {
+    box-sizing: border-box;
+    min-width: 300px;
+    max-width: 400px;
+    padding: 30px 10px;
+    margin: 20px;
+    color: var(--foreground-color);
+    text-align: center;
+    border: 1px solid var(--cyan-color);
+}
+
+#buildings-component-table-container {
+    z-index: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    min-height: 350px;
+    margin-top: 10px;
+    font-size: 0;
+}
+
+.buildings-component-table-row {
+    z-index: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    font-size: 0;
+}
+
+.component-button {
+    width: 32px;
+    height: 32px;
+    margin: 2px;
+    border: var(--blue-color) solid;
+    border-radius: 5px;
+}
+
+.unused {
+    display: none;
+}

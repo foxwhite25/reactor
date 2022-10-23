@@ -26,19 +26,19 @@
     <div class='sub-header'>
         <div class='currencies-container'>
             <div class='currency-container'>
-                <div class='tooltip'>Money: <span class="tooltip-text">Tooltip text</span></div>
+                <div class='tooltip'>Money: <span class='tooltip-text'>Tooltip text</span></div>
                 <div class='stat-display' id='money-display'></div>
             </div>
             <div class='currency-container'>
-                <div>Power: </div>
+                <div>Power:</div>
                 <div class='stat-display' id='power-display'></div>
             </div>
             <div class='currency-container'>
-                <div>Research: </div>
+                <div>Research:</div>
                 <div class='stat-display' id='research-display'></div>
             </div>
             <div class='currency-container'>
-                <div>Flame: </div>
+                <div>Flame:</div>
                 <div class='stat-display' id='flame-display'></div>
             </div>
             <div class='power-bar-container'>
@@ -61,20 +61,32 @@
             </div>
         </div>
     </div>
-    <nav class="navbar">
-        <div id="tab-row">
-            <button id="buildings-tab">Buildings</button>
-            <button id="upgrade-tab">Upgrades</button>
-            <button id="research-tab">Researches</button>
-            <button id="map-tab">Map</button>
-            <button id="setting-tab">Settings</button>
+    <nav class='navbar'>
+        <div id='tab-row'>
+            <button id='buildings-tab'>Buildings</button>
+            <button id='upgrade-tab'>Upgrades</button>
+            <button id='research-tab'>Researches</button>
+            <button id='map-tab'>Map</button>
+            <button id='setting-tab'>Settings</button>
         </div>
     </nav>
 
 </header>
-<div id="tab-border" style="background-color: var(--yellow-color);"></div>
+<div id='tab-border' style='background-color: var(--yellow-color);'></div>
 <div id='buildings'>
-    Hello I am buildings
+    <div id='buildings-component-container'>
+        Components:
+        <div id='buildings-component-table-container'>
+            <div class='buildings-component-table-row'>
+                <button class='component-button '></button>
+                <button class='component-button '></button>
+            </div>
+            <div class='buildings-component-table-row'>
+                <button class='component-button '></button>
+                <button class='component-button '></button>
+            </div>
+        </div>
+    </div>
 </div>
 <div id='upgrades'>
     Hello I am upgrades
