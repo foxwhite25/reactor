@@ -185,7 +185,6 @@ textarea {
     overflow: hidden;
     font-variant-numeric: tabular-nums;
     text-align: left; /* Keeps text from bouncing around */
-    white-space: pre-line;
 }
 
 a {

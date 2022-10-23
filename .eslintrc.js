@@ -27,7 +27,7 @@ module.exports = {
         },
     },
     rules: {
-        indent: ['error', 4, { SwitchCase: 4 }],
+        indent: ['error', 4, { SwitchCase: 1 }],
         quotes: ['error', 'single', 'avoid-escape'],
     },
     overrides: [

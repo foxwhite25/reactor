@@ -1,7 +1,7 @@
 import { player } from '@/Reactor';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { format } from '@/Utils';
-import { Globals, Tabs } from '@/Variables';
+import { Buildings, Globals, Tabs } from '@/Variables';
 import { visualUpdateBuildings } from '@/UpdateTabs';
 import { BuyBuilding } from '@/Buildings';
 
@@ -19,7 +19,7 @@ export const setupMapTable = (): void => {
         for (let j = 0; j < Globals.mapWidth; j++) {
             const cell = row.insertCell();
             cell.id = `map-cell-${i}-${j}`;
-            cell.className = 'map-table-cell ' + player.buildings[i][j];
+            cell.className = 'map-table-cell ' + player.buildings[i][j].buildingType;
             if ((i + j) % 2 == 0) {
                 cell.style.backgroundColor = 'var(--frontground-color)';
             } else {
@@ -28,6 +28,9 @@ export const setupMapTable = (): void => {
             cell.addEventListener('click', () => {
                 BuyBuilding(i, j);
             });
+            cell.addEventListener('mouseover', () => {
+                updateCellDescription(i, j)
+            })
         }
     }
 };
@@ -114,3 +117,15 @@ export const htmlInserts = (): void => {
     DOMCacheGetOrSet('power-bar').style.width = `${player.power.div(5)}%`;
     visualTab[Globals.currentTab]();
 };
+
+const updateCellDescription = (row: number, col: number) => {
+    const building = player.buildings[row][col]
+    if (building.buildingType == Buildings.Null) {
+        return
+    }
+    updateDescription(building.description(building))
+}
+
+const updateDescription = (description: string):void => {
+    DOMCacheGetOrSet('description-content').innerHTML = description
+}

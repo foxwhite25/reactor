@@ -3,8 +3,9 @@ import { clearTimers, setInterval } from '@/Timers';
 import { Player } from '@/Types';
 import Decimal from 'break_infinity.js';
 import { htmlInserts, setupMapTable } from '@/UpdateHTML';
-import { Globals, Tabs } from '@/Variables';
+import { Buildings, Globals, Tabs } from '@/Variables';
 import { toggleTabs } from '@/Toggles';
+import { getBuildingInstance } from '@/Buildings';
 
 export const player: Player = {
     firstPlayed: new Date().toISOString(),
@@ -12,8 +13,15 @@ export const player: Player = {
     research: new Decimal(0),
     power: new Decimal(0),
     flame: new Decimal(0),
-    buildings: Globals.emptyBoard,
 } as Player;
+
+player.buildings = []
+for (let i = 0; i < 17; i++) {
+    player.buildings.push([])
+    for (let j = 0; j < 34; j++) {
+        player.buildings[i].push(getBuildingInstance(i, j, Buildings.Null))
+    }
+}
 
 window.addEventListener('load', () => {
     setupMapTable();
@@ -23,7 +31,12 @@ window.addEventListener('load', () => {
 });
 
 export const updateAll = (): void => {
-    player.power = player.power.add(1);
+    player.buildings.forEach((row) => {
+        row.forEach((building)=>{
+            building.tick()
+        })
+    })
+
     if (player.power.greaterThan(Globals.maxPower)) {
         player.power = Globals.maxPower;
     }
