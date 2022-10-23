@@ -11,5 +11,6 @@ export const generateEventHandlers = (): void => {
     DOMCacheGetOrSet('buildings-tab').addEventListener('click', () => {toggleTabs(Tabs.Buildings)})
     DOMCacheGetOrSet('upgrade-tab').addEventListener('click', () => {toggleTabs(Tabs.Upgrades)})
     DOMCacheGetOrSet('research-tab').addEventListener('click', () => {toggleTabs(Tabs.Research)})
+    DOMCacheGetOrSet('map-tab').addEventListener('click', () => {toggleTabs(Tabs.Map)})
     DOMCacheGetOrSet('setting-tab').addEventListener('click', () => {toggleTabs(Tabs.Setting)})
 };

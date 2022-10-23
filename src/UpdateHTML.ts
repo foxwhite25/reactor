@@ -17,6 +17,10 @@ export const hideStuff = () :void => {
     DOMCacheGetOrSet('research-tab').style.color = 'var(--foreground-color)'
     DOMCacheGetOrSet('research-tab').style.backgroundColor = ''
 
+    DOMCacheGetOrSet('map').style.display = 'none'
+    DOMCacheGetOrSet('map-tab').style.color = 'var(--foreground-color)'
+    DOMCacheGetOrSet('map-tab').style.backgroundColor = ''
+
     DOMCacheGetOrSet('settings').style.display = 'none'
     DOMCacheGetOrSet('setting-tab').style.color = 'var(--foreground-color)'
     DOMCacheGetOrSet('setting-tab').style.backgroundColor = ''
@@ -41,10 +45,16 @@ export const hideStuff = () :void => {
         DOMCacheGetOrSet('research-tab').style.backgroundColor = 'var(--purple-color)';
         DOMCacheGetOrSet('researches').style.display = 'block'
     }
-    if (Globals.currentTab == Tabs.Setting) {
+    if (Globals.currentTab == Tabs.Map) {
         tab.style.backgroundColor = 'var(--green-color)'
+        DOMCacheGetOrSet('map-tab').style.color = 'var(--background-color)'
+        DOMCacheGetOrSet('map-tab').style.backgroundColor = 'var(--green-color)';
+        DOMCacheGetOrSet('map').style.display = 'block'
+    }
+    if (Globals.currentTab == Tabs.Setting) {
+        tab.style.backgroundColor = 'var(--orange-color)'
         DOMCacheGetOrSet('setting-tab').style.color = 'var(--background-color)'
-        DOMCacheGetOrSet('setting-tab').style.backgroundColor = 'var(--green-color)';
+        DOMCacheGetOrSet('setting-tab').style.backgroundColor = 'var(--orange-color)';
         DOMCacheGetOrSet('settings').style.display = 'block'
     }
 }

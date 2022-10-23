@@ -57,7 +57,7 @@ body {
     --cyan-color: #8be9fd;
     --blue-color: #6272a4;
     --green-color: #50fa7b;
-    --ornage-color: #ffb86c;
+    --orange-color: #ffb86c;
     --pink-color: #ff79c6;
     --red-color: #f55;
     --purple-color: #bd93f9;
@@ -284,4 +284,5 @@ button:active {
 #buildings-tab { border-color: var(--cyan-color); }
 #upgrade-tab { border-color: var(--yellow-color); }
 #research-tab { border-color: var(--purple-color); }
-#setting-tab { border-color: var(--green-color); }
+#map-tab { border-color: var(--green-color); }
+#setting-tab { border-color: var(--orange-color); }

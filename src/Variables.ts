@@ -6,7 +6,7 @@ export enum Tabs {
   Upgrades,
   Research,
   Setting,
-  Area,
+  Map,
 }
 
 export const Globals: GlobalVariables = {
