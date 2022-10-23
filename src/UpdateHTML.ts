@@ -118,14 +118,12 @@ export const htmlInserts = (): void => {
     visualTab[Globals.currentTab]();
 };
 
-const updateCellDescription = (row: number, col: number) => {
+export const updateCellDescription = (row: number, col: number):void => {
     const building = player.buildings[row][col]
-    const r = Globals.buildingDescriptionFunctions[building.buildingType](building)
-    console.log(r)
-    updateDescription(r.description, r.title)
+    updateDescription(Globals.buildingDescriptionFunctions[building.buildingType](building), Globals.buildingName[building.buildingType])
 }
 
-const updateDescription = (description: string, title: string):void => {
-    DOMCacheGetOrSet('description-title').innerText = title
+export const updateDescription = (description: string, title: string):void => {
+    DOMCacheGetOrSet('description-title').innerHTML = title
     DOMCacheGetOrSet('description-content').innerHTML = description
 }

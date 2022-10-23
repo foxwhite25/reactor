@@ -93,7 +93,7 @@ textarea {
 .sub-header {
     display: flex;
     flex-direction: row;
-    min-width: 1250px;
+    min-width: 1400px;
     max-width: calc((38px + 7.5em) * 4 + 40em);
     min-height: 90px;
     margin-bottom: 5px;
@@ -127,7 +127,6 @@ textarea {
 .progressbar {
     position: relative;
     width: 100%;
-    max-width: 500px;
     height: 30px;
     margin: 0;
     overflow: hidden;
@@ -171,6 +170,7 @@ textarea {
     flex-basis: 45%;
     flex-direction: column;
     width: 45%;
+    min-width: 45%;
     line-height: 1.2em;
 }
 
@@ -187,6 +187,7 @@ textarea {
     width: 100%;
     height: 5em;
     overflow: hidden;
+    font-size: 0.8em;
     font-variant-numeric: tabular-nums;
     text-align: left; /* Keeps text from bouncing around */
     white-space: pre-line;

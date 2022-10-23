@@ -30,7 +30,9 @@ export interface GlobalVariables {
     mapHeight: number,
 
     buildingTickFunctions: Record<typeof Globals.holdBuilding, ()=>void>
-    buildingDescriptionFunctions: Record<typeof Globals.holdBuilding, (b: BuildingInstance)=> {title: string, description: string}>
+    buildingDescriptionFunctions: Record<typeof Globals.holdBuilding, (b: BuildingInstance)=> string>
+    buildingName: Record<typeof Globals.holdBuilding, string>
+    buildingCost: Record<typeof Globals.holdBuilding, Decimal>
     maxPower: Decimal
     holdBuilding: Buildings
 
