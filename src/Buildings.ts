@@ -3,7 +3,7 @@ import { player } from '@/Reactor';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { BuildingInstance } from '@/Types';
 import Decimal from 'break_infinity.js';
-import { updateCellDescription, updateDescription } from '@/UpdateHTML';
+import { updateBuildingDescription, updateDescription } from '@/UpdateHTML';
 
 export const BuyBuilding = (row: number, col: number): void => {
     if (player.money.lessThan(Globals.buildingCost[Globals.holdBuilding])) {
@@ -13,7 +13,7 @@ export const BuyBuilding = (row: number, col: number): void => {
 
     player.buildings[row][col] = getBuildingInstance(row, col, Globals.holdBuilding);
     player.money = player.money.minus(Globals.buildingCost[Globals.holdBuilding])
-    updateCellDescription(row, col)
+    updateBuildingDescription(row, col)
     DOMCacheGetOrSet(`map-cell-${row}-${col}`).className = 'map-table-cell ' + player.buildings[row][col].buildingType;
 };
 

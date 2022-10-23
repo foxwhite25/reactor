@@ -31,6 +31,7 @@ export interface GlobalVariables {
 
     buildingTickFunctions: Record<typeof Globals.holdBuilding, ()=>void>
     buildingDescriptionFunctions: Record<typeof Globals.holdBuilding, (b: BuildingInstance)=> string>
+    componentDescription: Record<typeof Globals.holdBuilding, string>
     buildingName: Record<typeof Globals.holdBuilding, string>
     buildingCost: Record<typeof Globals.holdBuilding, Decimal>
     maxPower: Decimal

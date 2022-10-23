@@ -1,7 +1,7 @@
 import { player } from '@/Reactor';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { format } from '@/Utils';
-import { Globals, Tabs } from '@/Variables';
+import { Buildings, Globals, Tabs } from '@/Variables';
 import { visualUpdateBuildings } from '@/UpdateTabs';
 import { BuyBuilding } from '@/Buildings';
 
@@ -29,7 +29,7 @@ export const setupMapTable = (): void => {
                 BuyBuilding(i, j);
             });
             cell.addEventListener('mouseover', () => {
-                updateCellDescription(i, j)
+                updateBuildingDescription(i, j)
             })
         }
     }
@@ -118,9 +118,13 @@ export const htmlInserts = (): void => {
     visualTab[Globals.currentTab]();
 };
 
-export const updateCellDescription = (row: number, col: number):void => {
+export const updateBuildingDescription = (row: number, col: number):void => {
     const building = player.buildings[row][col]
     updateDescription(Globals.buildingDescriptionFunctions[building.buildingType](building), Globals.buildingName[building.buildingType])
+}
+
+export const updateComponentDescription = (c: Buildings):void => {
+    updateDescription(Globals.componentDescription[c], Globals.buildingName[c])
 }
 
 export const updateDescription = (description: string, title: string):void => {

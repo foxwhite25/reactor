@@ -25,7 +25,7 @@ export const Globals: GlobalVariables = {
             return;
         },
         'turbine': () => {
-            player.power = player.power.add(1);
+            player.power = player.power.add(0.15);
         },
         'solar-panel': () => {
             return;
@@ -33,19 +33,24 @@ export const Globals: GlobalVariables = {
     },
     buildingDescriptionFunctions: {
         '': () => {
-            return 'You can add components to this tile. You can start with wind turbines, they produce power that you can sell for more money.'
+            return 'You can add components to this tile. You can start with wind turbines, they produce power that you can sell for more money.';
         },
         'turbine': (b) => {
-            return `Produce <span style='color:var(--cyan-color)'>1</span> power. <br>Durability: ${b.durability}/30`
+            return `Produce <span style='color:var(--cyan-color)'>0.15</span> power. <br>Durability: ${b.durability}/30`;
         },
-        'solar-panel': () => {
-            return 'Foo bar lorem ipsum test test 123 123';
+        'solar-panel': (b) => {
+            return `Produce <span style='color:var(--red-color)'>3</span> heat. <br>Durability: ${b.durability}/30`;
         },
+    },
+    componentDescription: {
+        '': '',
+        'turbine': 'Cost: <span style=\'color:var(--yellow-color)\'>10</span> <br> Produce <span style=\'color:var(--cyan-color)\'>0.15</span> power.',
+        'solar-panel': 'Cost: <span style=\'color:var(--yellow-color)\'>100</span> <br> Produce <span style=\'color:var(--red-color)\'>3</span> heat.',
     },
     buildingName: {
         '': 'Empty Tile',
-        'turbine':'Wind Turbine',
-        'solar-panel':'Solar Panel',
+        'turbine': 'Wind Turbine',
+        'solar-panel': 'Solar Panel',
     },
     buildingCost: {
         '': new Decimal(0),
