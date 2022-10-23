@@ -35,7 +35,7 @@ const padEvery = (str: string, places = 3) => {
     let step = 1,
         newStr = '';
     for (let i = str.length - 1; i >= 0; i--) {
-    // pad every [places] places if we aren't at the beginning of the string
+        // pad every [places] places if we aren't at the beginning of the string
         if (step++ === places && i !== 0) {
             step = 1;
             newStr = group + str[i] + newStr;
@@ -71,14 +71,14 @@ export const format = (
     if (
     // invalid parameter
         (!(input instanceof Decimal) && typeof input !== 'number') ||
-    isNaN(input as number)
+      isNaN(input as number)
     ) {
         return isNaN(input as number) ? '0 [NaN]' : '0 [und.]';
     } else if (
     // this case handles numbers less than 1e-6 and greater than 0
         typeof input === 'number' &&
-    input < (!fractional ? 1e-3 : 1e-15) && // arbitrary number, don't change 1e-3
-    input > 0 // don't handle negative numbers, probably could be removed
+      input < (!fractional ? 1e-3 : 1e-15) && // arbitrary number, don't change 1e-3
+      input > 0 // don't handle negative numbers, probably could be removed
     ) {
         return input.toExponential(accuracy);
     }
@@ -86,7 +86,7 @@ export const format = (
     let power!: number;
     let mantissa!: number;
     if (isDecimal(input)) {
-    // Gets power and mantissa if input is of type decimal
+        // Gets power and mantissa if input is of type decimal
         power = input.e;
         mantissa = input.mantissa;
     } else {
@@ -151,8 +151,8 @@ export const format = (
         }
         return `${format(mantissa, accuracy, long)} / ${Math.pow(10, -power)}`;
     } else if (power < 6 || (long && power < 13)) {
-    // If the power is less than 6 or format long and less than 13 use standard formatting (123,456,789)
-    // Gets the standard representation of the number, safe as power is guaranteed to be > -12 and < 13
+        // If the power is less than 6 or format long and less than 13 use standard formatting (123,456,789)
+        // Gets the standard representation of the number, safe as power is guaranteed to be > -12 and < 13
         let standard = mantissa * Math.pow(10, power);
         let standardString;
         // Rounds up if the number experiences a rounding error
@@ -178,8 +178,8 @@ export const format = (
         // if the back is undefined that means there are no decimals to display, return just the front
         return !back ? frontFormatted : `${frontFormatted}${dec}${back}`;
     } else if (power < 1e6) {
-    // If the power is less than 1e6 then apply standard scientific notation
-    // Makes mantissa be rounded down to 2 decimal places
+        // If the power is less than 1e6 then apply standard scientific notation
+        // Makes mantissa be rounded down to 2 decimal places
         const mantissaLook = (Math.floor(mantissa * 100) / 100).toLocaleString(
             undefined,
             locOpts,

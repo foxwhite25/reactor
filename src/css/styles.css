@@ -143,10 +143,21 @@ textarea {
     transition: all 0.1s;
 }
 
-#money-display { color: var(--yellow-color); }
-#power-display { color: var(--cyan-color); }
-#research-display { color: var(--purple-color); }
-#flame-display { color: var(--red-color); }
+#money-display {
+    color: var(--yellow-color);
+}
+
+#power-display {
+    color: var(--cyan-color);
+}
+
+#research-display {
+    color: var(--purple-color);
+}
+
+#flame-display {
+    color: var(--red-color);
+}
 
 .stat-display {
     padding-left: 6px;
@@ -282,11 +293,25 @@ button:active {
     background-color: var(--frontground-color);
 }
 
-#buildings-tab { border-color: var(--cyan-color); }
-#upgrade-tab { border-color: var(--yellow-color); }
-#research-tab { border-color: var(--purple-color); }
-#map-tab { border-color: var(--green-color); }
-#setting-tab { border-color: var(--orange-color); }
+#buildings-tab {
+    border-color: var(--cyan-color);
+}
+
+#upgrade-tab {
+    border-color: var(--yellow-color);
+}
+
+#research-tab {
+    border-color: var(--purple-color);
+}
+
+#map-tab {
+    border-color: var(--green-color);
+}
+
+#setting-tab {
+    border-color: var(--orange-color);
+}
 
 #buildings {
     align-items: start;
@@ -367,5 +392,10 @@ button:active {
     background-position: center;
 }
 
-.turbine { background-image: url('Icons/turbine.png'); }
-.solar-panel { background-image: url('Icons/solarPanel.png'); }
+.turbine {
+    background-image: url('Icons/turbine.png');
+}
+
+.solar-panel {
+    background-image: url('Icons/solarPanel.png');
+}

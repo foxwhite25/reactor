@@ -1,6 +1,6 @@
 import { generateEventHandlers } from '@/EventListener';
 import { clearTimers, setInterval } from '@/Timers';
-import { Player } from '@/Type/Reactor';
+import { Player } from '@/Types';
 import Decimal from 'break_infinity.js';
 import { htmlInserts, setupMapTable } from '@/UpdateHTML';
 import { Globals, Tabs } from '@/Variables';
@@ -12,7 +12,7 @@ export const player: Player = {
     research: new Decimal(0),
     power: new Decimal(0),
     flame: new Decimal(0),
-    buildings: Globals.emptyBoard
+    buildings: Globals.emptyBoard,
 } as Player;
 
 window.addEventListener('load', () => {
@@ -25,7 +25,7 @@ window.addEventListener('load', () => {
 export const updateAll = (): void => {
     player.power = player.power.add(1);
     if (player.power.greaterThan(Globals.maxPower)) {
-        player.power = Globals.maxPower
+        player.power = Globals.maxPower;
     }
 };
 
