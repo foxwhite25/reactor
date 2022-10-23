@@ -16,9 +16,9 @@ export const player: Player = {
 } as Player;
 
 player.buildings = []
-for (let i = 0; i < 17; i++) {
+for (let i = 0; i < Globals.mapHeight; i++) {
     player.buildings.push([])
-    for (let j = 0; j < 34; j++) {
+    for (let j = 0; j < Globals.mapWidth; j++) {
         player.buildings[i].push(getBuildingInstance(i, j, Buildings.Null))
     }
 }
