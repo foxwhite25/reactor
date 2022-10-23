@@ -1,5 +1,5 @@
 import Decimal from 'break_infinity.js';
-import { Tabs } from '@/Variables';
+import { Buildings, Tabs } from '@/Variables';
 
 export interface Player {
   firstPlayed: string;
@@ -9,6 +9,8 @@ export interface Player {
   research: Decimal;
   flame: Decimal;
 
+  buildings: Buildings[][];
+
   setting: {
     theme: string;
   };
@@ -17,8 +19,10 @@ export interface Player {
 export interface GlobalVariables {
   mapWidth: number,
   mapHeight: number,
+  emptyBoard: Buildings[][],
 
   maxPower: Decimal
+  holdBuilding: Buildings
 
   currentTab: Tabs;
 }

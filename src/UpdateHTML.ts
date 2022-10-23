@@ -3,7 +3,7 @@ import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { format } from '@/Utils';
 import { Globals, Tabs } from '@/Variables';
 import { visualUpdateBuildings } from '@/UpdateTabs';
-import { GetBuyBuildingFunction } from '@/Buildings';
+import { BuyBuilding } from '@/Buildings';
 
 export const setupMapTable = ():void => {
     const table = document.getElementById('map-table') as HTMLTableElement | null
@@ -19,13 +19,13 @@ export const setupMapTable = ():void => {
         for (let j = 0; j < Globals.mapWidth; j++) {
             const cell = row.insertCell()
             cell.id = `map-cell-${i}-${j}`
-            cell.className = 'map-table-cell'
+            cell.className = 'map-table-cell ' + player.buildings[i][j]
             if ((i + j) % 2 == 0) {
                 cell.style.backgroundColor = 'var(--frontground-color)'
             } else {
                 cell.style.backgroundColor = 'var(--blue-color)'
             }
-            cell.addEventListener('click', GetBuyBuildingFunction(i, j))
+            cell.addEventListener('click', () => {BuyBuilding(i, j)})
         }
     }
 }

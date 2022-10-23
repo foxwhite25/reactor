@@ -12,6 +12,7 @@ export const player: Player = {
     research: new Decimal(0),
     power: new Decimal(0),
     flame: new Decimal(0),
+    buildings: Globals.emptyBoard
 } as Player;
 
 window.addEventListener('load', () => {

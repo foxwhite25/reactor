@@ -1,7 +1,7 @@
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { player } from '@/Reactor';
-import { toggleTabs } from '@/Toggles';
-import { Tabs } from '@/Variables';
+import { toggleBuildings, toggleTabs } from '@/Toggles';
+import { Buildings, Tabs } from '@/Variables';
 
 export const generateEventHandlers = (): void => {
     DOMCacheGetOrSet('sell-power-button').addEventListener('click', () => {
@@ -13,4 +13,6 @@ export const generateEventHandlers = (): void => {
     DOMCacheGetOrSet('research-tab').addEventListener('click', () => {toggleTabs(Tabs.Research)})
     DOMCacheGetOrSet('map-tab').addEventListener('click', () => {toggleTabs(Tabs.Map)})
     DOMCacheGetOrSet('setting-tab').addEventListener('click', () => {toggleTabs(Tabs.Setting)})
+    DOMCacheGetOrSet('turbine').addEventListener('click', () => {toggleBuildings(Buildings.WindTurbine)})
+    DOMCacheGetOrSet('solar-panel').addEventListener('click', () => {toggleBuildings(Buildings.SolarPanel)})
 };
