@@ -20,6 +20,11 @@ export const setupMapTable = ():void => {
             const cell = row.insertCell()
             cell.id = `map-cell-${i}-${j}`
             cell.className = 'map-table-cell'
+            if ((i + j) % 2 == 0) {
+                cell.style.backgroundColor = 'var(--frontground-color)'
+            } else {
+                cell.style.backgroundColor = 'var(--blue-color)'
+            }
             cell.addEventListener('click', GetBuyBuildingFunction(i, j))
         }
     }
