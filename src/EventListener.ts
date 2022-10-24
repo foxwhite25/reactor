@@ -1,10 +1,17 @@
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { player } from '@/Reactor';
 import { toggleBuildings, toggleTabs } from '@/Toggles';
-import { Buildings, Tabs } from '@/Variables';
+import { Buildings, Globals, Tabs } from '@/Variables';
 import { updateComponentDescription } from '@/UpdateHTML';
 
 export const generateEventHandlers = (): void => {
+    DOMCacheGetOrSet('body').addEventListener('keyup', (e)=>{
+        if (Globals.shift && e.key == 'Shift') {
+            Globals.shift = false
+            console.log(Globals.shift)
+        }
+    })
+
     DOMCacheGetOrSet('sell-power-button').addEventListener('click', () => {
         player.money = player.money.add(player.power);
         player.power = player.power.mul(0);
@@ -28,11 +35,11 @@ export const generateEventHandlers = (): void => {
     DOMCacheGetOrSet('turbine').addEventListener('click', () => {
         toggleBuildings(Buildings.WindTurbine);
     });
-    DOMCacheGetOrSet('solar-panel').addEventListener('click', () => {
-        toggleBuildings(Buildings.SolarPanel);
-    });
     DOMCacheGetOrSet('turbine').addEventListener('mouseover', () => {
         updateComponentDescription(Buildings.WindTurbine);
+    });
+    DOMCacheGetOrSet('solar-panel').addEventListener('click', () => {
+        toggleBuildings(Buildings.SolarPanel);
     });
     DOMCacheGetOrSet('solar-panel').addEventListener('mouseover', () => {
         updateComponentDescription(Buildings.SolarPanel);

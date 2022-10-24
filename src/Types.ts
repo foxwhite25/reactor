@@ -1,5 +1,5 @@
 import Decimal from 'break_infinity.js';
-import { Buildings, Globals, Tabs } from '@/Variables';
+import { Buildings, Tabs } from '@/Variables';
 
 export interface Player {
     firstPlayed: string;
@@ -29,13 +29,16 @@ export interface GlobalVariables {
     mapWidth: number,
     mapHeight: number,
 
-    buildingTickFunctions: Record<typeof Globals.holdBuilding, ()=>void>
-    buildingDescriptionFunctions: Record<typeof Globals.holdBuilding, (b: BuildingInstance)=> string>
-    componentDescription: Record<typeof Globals.holdBuilding, string>
-    buildingName: Record<typeof Globals.holdBuilding, string>
-    buildingCost: Record<typeof Globals.holdBuilding, Decimal>
+    buildingClass: string[],
+    buildingTickFunctions: (() => void)[]
+    buildingDescriptionFunctions: ((b: BuildingInstance) => string)[]
+    componentDescription: string[]
+    buildingName: string[]
+    buildingCost: Decimal[]
+
     maxPower: Decimal
     holdBuilding: Buildings
+    shift: boolean
 
     currentTab: Tabs;
 }

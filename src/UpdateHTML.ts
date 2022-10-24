@@ -19,18 +19,24 @@ export const setupMapTable = (): void => {
         for (let j = 0; j < Globals.mapWidth; j++) {
             const cell = row.insertCell();
             cell.id = `map-cell-${i}-${j}`;
-            cell.className = 'map-table-cell ' + player.buildings[i][j].buildingType;
+            cell.className = 'map-table-cell ' + Globals.buildingClass[player.buildings[i][j].buildingType];
             if ((i + j) % 2 == 0) {
                 cell.style.backgroundColor = 'var(--frontground-color)';
             } else {
                 cell.style.backgroundColor = 'var(--blue-color)';
             }
-            cell.addEventListener('click', () => {
+            cell.addEventListener('click', (e: MouseEvent) => {
                 BuyBuilding(i, j);
+                if (e.shiftKey) {
+                    Globals.shift = true
+                }
             });
             cell.addEventListener('mouseover', () => {
-                updateBuildingDescription(i, j)
-            })
+                updateBuildingDescription(i, j);
+                if (Globals.shift) {
+                    BuyBuilding(i, j);
+                }
+            });
         }
     }
 };
@@ -118,16 +124,16 @@ export const htmlInserts = (): void => {
     visualTab[Globals.currentTab]();
 };
 
-export const updateBuildingDescription = (row: number, col: number):void => {
-    const building = player.buildings[row][col]
-    updateDescription(Globals.buildingDescriptionFunctions[building.buildingType](building), Globals.buildingName[building.buildingType])
-}
+export const updateBuildingDescription = (row: number, col: number): void => {
+    const building = player.buildings[row][col];
+    updateDescription(Globals.buildingDescriptionFunctions[building.buildingType](building), Globals.buildingName[building.buildingType]);
+};
 
-export const updateComponentDescription = (c: Buildings):void => {
-    updateDescription(Globals.componentDescription[c], Globals.buildingName[c])
-}
+export const updateComponentDescription = (c: Buildings): void => {
+    updateDescription(Globals.componentDescription[c], Globals.buildingName[c]);
+};
 
-export const updateDescription = (description: string, title: string):void => {
-    DOMCacheGetOrSet('description-title').innerHTML = title
-    DOMCacheGetOrSet('description-content').innerHTML = description
-}
+export const updateDescription = (description: string, title: string): void => {
+    DOMCacheGetOrSet('description-title').innerHTML = title;
+    DOMCacheGetOrSet('description-content').innerHTML = description;
+};

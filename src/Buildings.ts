@@ -7,14 +7,14 @@ import { updateBuildingDescription, updateDescription } from '@/UpdateHTML';
 
 export const BuyBuilding = (row: number, col: number): void => {
     if (player.money.lessThan(Globals.buildingCost[Globals.holdBuilding])) {
-        updateDescription('', `<span style="color: var(--red-color)">You don't have enough money for ${Globals.buildingName[Globals.holdBuilding]}!</span>`)
-        return
+        updateDescription('', `<span style='color: var(--red-color)'>You don't have enough money for ${Globals.buildingName[Globals.holdBuilding]}!</span>`);
+        return;
     }
 
     player.buildings[row][col] = getBuildingInstance(row, col, Globals.holdBuilding);
-    player.money = player.money.minus(Globals.buildingCost[Globals.holdBuilding])
-    updateBuildingDescription(row, col)
-    DOMCacheGetOrSet(`map-cell-${row}-${col}`).className = 'map-table-cell ' + player.buildings[row][col].buildingType;
+    player.money = player.money.minus(Globals.buildingCost[Globals.holdBuilding]);
+    updateBuildingDescription(row, col);
+    DOMCacheGetOrSet(`map-cell-${row}-${col}`).className = 'map-table-cell ' + Globals.buildingClass[player.buildings[row][col].buildingType];
 };
 
 export const getBuildingInstance = (row: number, col: number, building: Buildings): BuildingInstance => {

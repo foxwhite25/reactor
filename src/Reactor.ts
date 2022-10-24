@@ -15,11 +15,11 @@ export const player: Player = {
     flame: new Decimal(0),
 } as Player;
 
-player.buildings = []
+player.buildings = [];
 for (let i = 0; i < Globals.mapHeight; i++) {
-    player.buildings.push([])
+    player.buildings.push([]);
     for (let j = 0; j < Globals.mapWidth; j++) {
-        player.buildings[i].push(getBuildingInstance(i, j, Buildings.Null))
+        player.buildings[i].push(getBuildingInstance(i, j, Buildings.Null));
     }
 }
 
@@ -32,10 +32,10 @@ window.addEventListener('load', () => {
 
 export const updateAll = (): void => {
     player.buildings.forEach((row) => {
-        row.forEach((building)=>{
-            Globals.buildingTickFunctions[building.buildingType]()
-        })
-    })
+        row.forEach((building) => {
+            Globals.buildingTickFunctions[building.buildingType]();
+        });
+    });
 
     if (player.power.greaterThan(Globals.maxPower)) {
         player.power = Globals.maxPower;

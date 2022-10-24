@@ -17,13 +17,13 @@ export const toggleTabs = (tabs: Tabs): void => {
 export const toggleBuildings = (building: Buildings): void => {
     if (building == Globals.holdBuilding) {
         Globals.holdBuilding = Buildings.Null;
-        DOMCacheGetOrSet(building).style.borderColor = 'var(--blue-color)';
+        DOMCacheGetOrSet(Globals.buildingClass[building]).style.borderColor = 'var(--blue-color)';
     } else {
         if (Globals.holdBuilding != Buildings.Null) {
-            DOMCacheGetOrSet(Globals.holdBuilding).style.borderColor = 'var(--blue-color)';
+            DOMCacheGetOrSet(Globals.buildingClass[Globals.holdBuilding]).style.borderColor = 'var(--blue-color)';
         }
         Globals.holdBuilding = building;
-        DOMCacheGetOrSet(building).style.borderColor = 'var(--green-color)';
+        DOMCacheGetOrSet(Globals.buildingClass[building]).style.borderColor = 'var(--green-color)';
     }
 
     const el = document.activeElement as HTMLElement | null;
