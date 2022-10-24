@@ -32,7 +32,7 @@ export const setupMapTable = (): void => {
                 }
             });
             cell.addEventListener('mouseover', () => {
-                updateBuildingDescription(i, j);
+                buildingTooltip(i, j);
                 if (Globals.shift) {
                     BuyHolding(i, j);
                 }
@@ -48,6 +48,9 @@ export const setupMapTable = (): void => {
                 }
                 return false
             })
+            cell.addEventListener('mouseout', () => {
+                hideTooltip();
+            });
         }
     }
 };
@@ -74,33 +77,39 @@ export const hideStuff = (): void => {
     DOMCacheGetOrSet('setting-tab').style.backgroundColor = '';
 
     const tab = DOMCacheGetOrSet('tab-border');
+    const tooltip = DOMCacheGetOrSet('tooltip');
 
     if (Globals.currentTab == Tabs.Buildings) {
         tab.style.backgroundColor = 'var(--cyan-color)';
+        tooltip.style.borderColor = 'var(--cyan-color)';
         DOMCacheGetOrSet('buildings-tab').style.color = 'var(--background-color)';
         DOMCacheGetOrSet('buildings-tab').style.backgroundColor = 'var(--cyan-color)';
         DOMCacheGetOrSet('buildings').style.display = 'flex';
     }
     if (Globals.currentTab == Tabs.Upgrades) {
         tab.style.backgroundColor = 'var(--yellow-color)';
+        tooltip.style.borderColor = 'var(--yellow-color)';
         DOMCacheGetOrSet('upgrade-tab').style.color = 'var(--background-color)';
         DOMCacheGetOrSet('upgrade-tab').style.backgroundColor = 'var(--yellow-color)';
         DOMCacheGetOrSet('upgrades').style.display = 'block';
     }
     if (Globals.currentTab == Tabs.Research) {
         tab.style.backgroundColor = 'var(--purple-color)';
+        tooltip.style.borderColor = 'var(--purple-color)';
         DOMCacheGetOrSet('research-tab').style.color = 'var(--background-color)';
         DOMCacheGetOrSet('research-tab').style.backgroundColor = 'var(--purple-color)';
         DOMCacheGetOrSet('researches').style.display = 'block';
     }
     if (Globals.currentTab == Tabs.Map) {
         tab.style.backgroundColor = 'var(--green-color)';
+        tooltip.style.borderColor = 'var(--green-color)';
         DOMCacheGetOrSet('map-tab').style.color = 'var(--background-color)';
         DOMCacheGetOrSet('map-tab').style.backgroundColor = 'var(--green-color)';
         DOMCacheGetOrSet('map').style.display = 'block';
     }
     if (Globals.currentTab == Tabs.Setting) {
         tab.style.backgroundColor = 'var(--orange-color)';
+        tooltip.style.borderColor = 'var(--orange-color)';
         DOMCacheGetOrSet('setting-tab').style.color = 'var(--background-color)';
         DOMCacheGetOrSet('setting-tab').style.backgroundColor = 'var(--orange-color)';
         DOMCacheGetOrSet('settings').style.display = 'block';
@@ -135,16 +144,21 @@ export const htmlInserts = (): void => {
     visualTab[Globals.currentTab]();
 };
 
-export const updateBuildingDescription = (row: number, col: number): void => {
+export const buildingTooltip = (row: number, col: number): void => {
     const building = player.buildings[row][col];
-    updateDescription(Globals.buildingDescriptionFunctions[building.buildingType](building), Globals.buildingName[building.buildingType]);
+    showTooltip(Globals.buildingDescriptionFunctions[building.buildingType](building), Globals.buildingName[building.buildingType]);
 };
 
-export const updateComponentDescription = (c: Buildings): void => {
-    updateDescription(Globals.componentDescription[c], Globals.buildingName[c]);
+export const componentTooltip = (c: Buildings): void => {
+    showTooltip(Globals.componentDescription[c], Globals.buildingName[c]);
 };
 
-export const updateDescription = (description: string, title: string): void => {
+export const showTooltip = (description: string, title: string): void => {
+    DOMCacheGetOrSet('tooltip').style.display = 'block'
     DOMCacheGetOrSet('description-title').innerHTML = title;
     DOMCacheGetOrSet('description-content').innerHTML = description;
 };
+
+export const hideTooltip = (): void => {
+    DOMCacheGetOrSet('tooltip').style.display = 'none'
+}

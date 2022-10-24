@@ -1,10 +1,16 @@
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { player } from '@/Reactor';
 import { toggleBuildings, toggleTabs } from '@/Toggles';
-import { Buildings, Globals, Tabs } from '@/Variables';
-import { updateComponentDescription } from '@/UpdateHTML';
+import { Globals, Tabs } from '@/Variables';
+import { componentTooltip, hideTooltip } from '@/UpdateHTML';
 
 export const generateEventHandlers = (): void => {
+    document.addEventListener('mousemove', (e)=>{
+        const tooltip = DOMCacheGetOrSet('tooltip')
+        tooltip.style.left = e.pageX + 'px';
+        tooltip.style.top = e.pageY + 'px';
+    });
+
     DOMCacheGetOrSet('body').addEventListener('keyup', (e)=>{
         if (Globals.shift && e.key == 'Shift') {
             Globals.shift = false
@@ -34,16 +40,18 @@ export const generateEventHandlers = (): void => {
         toggleTabs(Tabs.Setting);
     });
 
-    DOMCacheGetOrSet('turbine').addEventListener('click', () => {
-        toggleBuildings(Buildings.WindTurbine);
-    });
-    DOMCacheGetOrSet('turbine').addEventListener('mouseover', () => {
-        updateComponentDescription(Buildings.WindTurbine);
-    });
-    DOMCacheGetOrSet('solar-panel').addEventListener('click', () => {
-        toggleBuildings(Buildings.SolarPanel);
-    });
-    DOMCacheGetOrSet('solar-panel').addEventListener('mouseover', () => {
-        updateComponentDescription(Buildings.SolarPanel);
-    });
+    Globals.buildingClass.forEach((className, index)=>{
+        if (className == '') {
+            return
+        }
+        DOMCacheGetOrSet(className).addEventListener('click', () => {
+            toggleBuildings(index);
+        });
+        DOMCacheGetOrSet(className).addEventListener('mouseover', () => {
+            componentTooltip(index);
+        });
+        DOMCacheGetOrSet(className).addEventListener('mouseout', () => {
+            hideTooltip();
+        });
+    })
 };

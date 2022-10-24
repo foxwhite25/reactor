@@ -217,29 +217,16 @@ a:visited {
     border-radius: 1px;
 }
 
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
-}
-
-/* Tooltip text */
-.tooltip .tooltip-text {
-    /* Position the tooltip text - see examples below! */
+#tooltip {
     position: absolute;
-    z-index: 1;
-    width: 120px;
-    padding: 5px 0;
-    color: #fff;
-    text-align: center;
-    visibility: hidden;
-    background-color: black;
-    border-radius: 6px;
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltip-text {
-    visibility: visible;
+    z-index: 1000;
+    display: none;
+    width: 200px;
+    height: 100px;
+    padding: 10px;
+    margin-left: 28px;
+    background-color: var(--background-color);
+    border: 1px solid;
 }
 
 #tab-border {
