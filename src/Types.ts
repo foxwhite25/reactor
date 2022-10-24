@@ -7,7 +7,8 @@ export interface Player {
     money: Decimal;
     power: Decimal;
     research: Decimal;
-    flame: Decimal;
+    heat: Decimal;
+    particle: Decimal;
 
     buildings: BuildingInstance[][];
 
@@ -37,6 +38,7 @@ export interface GlobalVariables {
     buildingCost: Decimal[]
 
     maxPower: Decimal
+    maxHeat: Decimal
     holdBuilding: Buildings
     shift: boolean
     shiftRemove: boolean

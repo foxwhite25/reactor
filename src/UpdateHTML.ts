@@ -28,7 +28,7 @@ export const setupMapTable = (): void => {
             cell.addEventListener('click', (e: MouseEvent) => {
                 BuyHolding(i, j);
                 if (e.shiftKey) {
-                    Globals.shift = true
+                    Globals.shift = true;
                 }
             });
             cell.addEventListener('mouseover', () => {
@@ -37,17 +37,17 @@ export const setupMapTable = (): void => {
                     BuyHolding(i, j);
                 }
                 if (Globals.shiftRemove) {
-                    BuyBuilding(i, j, Buildings.Null)
+                    BuyBuilding(i, j, Buildings.Null);
                 }
             });
             cell.addEventListener('contextmenu', (e) => {
-                e.preventDefault()
-                BuyBuilding(i, j, Buildings.Null)
+                e.preventDefault();
+                BuyBuilding(i, j, Buildings.Null);
                 if (e.shiftKey) {
-                    Globals.shiftRemove = true
+                    Globals.shiftRemove = true;
                 }
-                return false
-            })
+                return false;
+            });
             cell.addEventListener('mouseout', () => {
                 hideTooltip();
             });
@@ -126,21 +126,27 @@ const visualTab: Record<typeof Globals.currentTab, () => void> = {
 
 export const htmlInserts = (): void => {
     // ALWAYS Update these, for they are the most important resources
-    const playerRequirements = ['money', 'power', 'research', 'flame'] as const;
-    const domRequirements = ['money-display', 'power-display', 'research-display', 'flame-display'] as const;
+    const playerRequirements = ['money', 'power', 'research', 'heat', 'particle'] as const;
+    const domRequirements = ['money-display', 'power-display', 'research-display', 'heat-display', 'particle-display'] as const;
     for (let i = 0; i < playerRequirements.length; i++) {
         const text = format(player[`${playerRequirements[i]}` as const]);
         const dom = DOMCacheGetOrSet(`${domRequirements[i]}` as const);
         if (dom.textContent !== text) {
-            if (playerRequirements[i] == 'power') {
-                dom.textContent = `${text} / ${format(Globals.maxPower)}`;
-            } else {
-                dom.textContent = text;
+            switch (playerRequirements[i]) {
+                case 'power':
+                    dom.textContent = `${text} / ${format(Globals.maxPower)}`;
+                    break;
+                case 'heat':
+                    dom.textContent = `${text} / ${format(Globals.maxHeat)}`;
+                    break;
+                default:
+                    dom.textContent = text;
             }
         }
     }
 
-    DOMCacheGetOrSet('power-bar').style.width = `${player.power.div(5)}%`;
+    DOMCacheGetOrSet('power-bar').style.width = `${player.power.multiply(100).divide(Globals.maxPower)}%`;
+    DOMCacheGetOrSet('heat-bar').style.width = `${player.heat.multiply(100).divide(Globals.maxHeat)}%`;
     visualTab[Globals.currentTab]();
 };
 
@@ -154,11 +160,11 @@ export const componentTooltip = (c: Buildings): void => {
 };
 
 export const showTooltip = (description: string, title: string): void => {
-    DOMCacheGetOrSet('tooltip').style.display = 'block'
+    DOMCacheGetOrSet('tooltip').style.display = 'block';
     DOMCacheGetOrSet('description-title').innerHTML = title;
     DOMCacheGetOrSet('description-content').innerHTML = description;
 };
 
 export const hideTooltip = (): void => {
-    DOMCacheGetOrSet('tooltip').style.display = 'none'
-}
+    DOMCacheGetOrSet('tooltip').style.display = 'none';
+};

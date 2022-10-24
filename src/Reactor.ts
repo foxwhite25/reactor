@@ -10,9 +10,10 @@ import { getBuildingInstance } from '@/Buildings';
 export const player: Player = {
     firstPlayed: new Date().toISOString(),
     money: new Decimal(10),
+    heat: new Decimal(222),
     research: new Decimal(0),
     power: new Decimal(0),
-    flame: new Decimal(0),
+    particle: new Decimal(0),
 } as Player;
 
 player.buildings = [];

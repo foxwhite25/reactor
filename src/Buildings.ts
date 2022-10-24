@@ -6,12 +6,12 @@ import Decimal from 'break_infinity.js';
 import { buildingTooltip, showTooltip } from '@/UpdateHTML';
 
 export const BuyHolding = (row: number, col: number): void => {
-    BuyBuilding(row, col, Globals.holdBuilding)
+    BuyBuilding(row, col, Globals.holdBuilding);
 };
 
 export const BuyBuilding = (row: number, col: number, building: Buildings): void => {
     if (building != Buildings.Null && player.buildings[row][col].buildingType != Buildings.Null) {
-        return
+        return;
     }
 
     if (building != Buildings.Null && player.money.lessThan(Globals.buildingCost[building])) {
@@ -23,7 +23,7 @@ export const BuyBuilding = (row: number, col: number, building: Buildings): void
     player.money = player.money.minus(Globals.buildingCost[building]);
     buildingTooltip(row, col);
     DOMCacheGetOrSet(`map-cell-${row}-${col}`).className = 'map-table-cell ' + Globals.buildingClass[player.buildings[row][col].buildingType];
-}
+};
 
 export const getBuildingInstance = (row: number, col: number, building: Buildings): BuildingInstance => {
     return {
