@@ -3,7 +3,7 @@ import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { format } from '@/Utils';
 import { Buildings, Globals, Tabs } from '@/Variables';
 import { visualUpdateBuildings } from '@/UpdateTabs';
-import { BuyBuilding } from '@/Buildings';
+import { BuyBuilding, BuyHolding } from '@/Buildings';
 
 export const setupMapTable = (): void => {
     const table = document.getElementById('map-table') as HTMLTableElement | null;
@@ -26,7 +26,7 @@ export const setupMapTable = (): void => {
                 cell.style.backgroundColor = 'var(--blue-color)';
             }
             cell.addEventListener('click', (e: MouseEvent) => {
-                BuyBuilding(i, j);
+                BuyHolding(i, j);
                 if (e.shiftKey) {
                     Globals.shift = true
                 }
@@ -34,9 +34,20 @@ export const setupMapTable = (): void => {
             cell.addEventListener('mouseover', () => {
                 updateBuildingDescription(i, j);
                 if (Globals.shift) {
-                    BuyBuilding(i, j);
+                    BuyHolding(i, j);
+                }
+                if (Globals.shiftRemove) {
+                    BuyBuilding(i, j, Buildings.Null)
                 }
             });
+            cell.addEventListener('contextmenu', (e) => {
+                e.preventDefault()
+                BuyBuilding(i, j, Buildings.Null)
+                if (e.shiftKey) {
+                    Globals.shiftRemove = true
+                }
+                return false
+            })
         }
     }
 };

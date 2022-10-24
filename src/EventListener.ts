@@ -8,7 +8,9 @@ export const generateEventHandlers = (): void => {
     DOMCacheGetOrSet('body').addEventListener('keyup', (e)=>{
         if (Globals.shift && e.key == 'Shift') {
             Globals.shift = false
-            console.log(Globals.shift)
+        }
+        if (Globals.shiftRemove && e.key == 'Shift') {
+            Globals.shift = false
         }
     })
 

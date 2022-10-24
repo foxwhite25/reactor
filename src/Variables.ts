@@ -63,6 +63,7 @@ export const Globals: GlobalVariables = {
     maxPower: new Decimal(500),
     holdBuilding: Buildings.Null,
     shift: false,
+    shiftRemove: false,
 
     currentTab: Tabs.Buildings,
 };

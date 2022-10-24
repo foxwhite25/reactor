@@ -39,6 +39,7 @@ export interface GlobalVariables {
     maxPower: Decimal
     holdBuilding: Buildings
     shift: boolean
+    shiftRemove: boolean
 
     currentTab: Tabs;
 }

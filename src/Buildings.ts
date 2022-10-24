@@ -5,17 +5,25 @@ import { BuildingInstance } from '@/Types';
 import Decimal from 'break_infinity.js';
 import { updateBuildingDescription, updateDescription } from '@/UpdateHTML';
 
-export const BuyBuilding = (row: number, col: number): void => {
-    if (player.money.lessThan(Globals.buildingCost[Globals.holdBuilding])) {
-        updateDescription('', `<span style='color: var(--red-color)'>You don't have enough money for ${Globals.buildingName[Globals.holdBuilding]}!</span>`);
+export const BuyHolding = (row: number, col: number): void => {
+    BuyBuilding(row, col, Globals.holdBuilding)
+};
+
+export const BuyBuilding = (row: number, col: number, building: Buildings): void => {
+    if (building != Buildings.Null && player.buildings[row][col].buildingType != Buildings.Null) {
+        return
+    }
+
+    if (building != Buildings.Null && player.money.lessThan(Globals.buildingCost[building])) {
+        updateDescription('', `<span style='color: var(--red-color)'>You don't have enough money for ${Globals.buildingName[building]}!</span>`);
         return;
     }
 
-    player.buildings[row][col] = getBuildingInstance(row, col, Globals.holdBuilding);
-    player.money = player.money.minus(Globals.buildingCost[Globals.holdBuilding]);
+    player.buildings[row][col] = getBuildingInstance(row, col, building);
+    player.money = player.money.minus(Globals.buildingCost[building]);
     updateBuildingDescription(row, col);
     DOMCacheGetOrSet(`map-cell-${row}-${col}`).className = 'map-table-cell ' + Globals.buildingClass[player.buildings[row][col].buildingType];
-};
+}
 
 export const getBuildingInstance = (row: number, col: number, building: Buildings): BuildingInstance => {
     return {
