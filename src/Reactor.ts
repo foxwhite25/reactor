@@ -2,10 +2,9 @@ import { generateEventHandlers } from '@/EventListener';
 import { clearTimers, setInterval } from '@/Timers';
 import { Player } from '@/Types';
 import Decimal from 'break_infinity.js';
-import { htmlInserts, setupMapTable } from '@/UpdateHTML';
-import { Buildings, Globals, Tabs } from '@/Variables';
+import { htmlInserts, processComponentQue, setupPage } from '@/UpdateHTML';
+import { Globals, Tabs } from '@/Variables';
 import { toggleTabs } from '@/Toggles';
-import { getBuildingInstance } from '@/Buildings';
 
 export const player: Player = {
     firstPlayed: new Date().toISOString(),
@@ -14,29 +13,28 @@ export const player: Player = {
     research: new Decimal(0),
     power: new Decimal(0),
     particle: new Decimal(0),
-} as Player;
+    tiles: [],
+    setting: {
+        theme: 'dracula',
+    },
+};
 
-player.buildings = [];
 for (let i = 0; i < Globals.mapHeight; i++) {
-    player.buildings.push([]);
+    player.tiles.push([]);
     for (let j = 0; j < Globals.mapWidth; j++) {
-        player.buildings[i].push(getBuildingInstance(i, j, Buildings.Null));
+        player.tiles[i].push(null);
     }
 }
 
 window.addEventListener('load', () => {
-    setupMapTable();
+    setupPage();
     generateEventHandlers();
 
     void reload();
 });
 
 export const updateAll = (): void => {
-    player.buildings.forEach((row) => {
-        row.forEach((building) => {
-            Globals.buildingTickFunctions[building.buildingType]();
-        });
-    });
+    processComponentQue();
 
     if (player.power.greaterThan(Globals.maxPower)) {
         player.power = Globals.maxPower;

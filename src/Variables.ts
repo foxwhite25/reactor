@@ -1,6 +1,5 @@
-import { BuildingInstance, GlobalVariables } from '@/Types';
+import { GlobalVariables } from '@/Types';
 import Decimal from 'break_infinity.js';
-import { player } from '@/Reactor';
 
 export enum Tabs {
     Buildings,
@@ -10,69 +9,68 @@ export enum Tabs {
     Map,
 }
 
-export enum Buildings {
-    Null,
+export enum Component {
     WindTurbine,
-    SolarPanel
+    Vent_1
 }
-
-const emptyFunction = (): void => {
-    return;
-};
 
 export const Globals: GlobalVariables = {
     mapWidth: 34,
     mapHeight: 17,
 
-    buildingClass: [
-        '',
-        'turbine',
-        'solar-panel',
-    ],
-    buildingTickFunctions: [
-        emptyFunction,
-        (): void => {
-            player.power = player.power.add(0.15);
+
+    componentsData: [
+        {
+            id: 'wind-turbine',
+            title: 'Wind Turbine',
+            row: 0,
+            baseDescription: 'Cost: %cost <br>Generate %power power',
+            baseCost: new Decimal(10),
+            basePower: new Decimal(1),
+            baseHeat: new Decimal(0),
+            baseTicks: new Decimal(30),
+            cells: new Decimal(0),
         },
-        emptyFunction,
-    ],
-    buildingDescriptionFunctions: [
-        (): string => {
-            return 'You can add components to this tile. You can start with wind turbines, they produce power that you can sell for more money.';
-        },
-        (b: BuildingInstance): string => {
-            return `Produce <span style='color:var(--cyan-color)'>0.15</span> power. <br>Durability: ${b.durability}/30`;
-        },
-        (b: BuildingInstance): string => {
-            return `Produce <span style='color:var(--red-color)'>3</span> heat. <br>Durability: ${b.durability}/30`;
+        {
+            id: 'vent-1',
+            title: 'Standard Vent',
+            row: 0,
+            baseDescription: 'Cost: %cost <br>Vent %heat-dissipate heat.',
+            baseCost: new Decimal(10),
+            baseMaxHeat: new Decimal(1),
+            baseHeatDissipate: new Decimal(1),
         },
     ],
-    // Edit after declaration
-    componentDescription: [],
-    buildingName: [
-        'Empty Tile',
-        'Wind Turbine',
-        'Solar Panel',
-    ],
-    buildingCost: [
-        new Decimal(0),
-        new Decimal(10),
-        new Decimal(100),
-    ],
+    tileExtras: [],
 
     maxPower: new Decimal(500),
     maxHeat: new Decimal(500),
-    holdBuilding: Buildings.Null,
+    selectorComponent: null,
+    componentQue: [],
     shift: false,
     shiftRemove: false,
 
     currentTab: Tabs.Buildings,
 };
 
-Globals.componentDescription = [
-    '',
-    `Cost: <span style='color:var(--yellow-color)'>${Globals.buildingCost[Buildings.WindTurbine]}</span> <br> Produce <span style='color:var(--cyan-color)'>0.15</span> power.`,
-    `Cost: <span style='color:var(--yellow-color)'>${Globals.buildingCost[Buildings.SolarPanel]}</span> <br> Produce <span style='color:var(--red-color)'>3</span> heat.`,
-];
+for (let i = 0; i < Globals.mapHeight; i++) {
+    Globals.tileExtras.push([]);
+    for (let j = 0; j < Globals.mapWidth; j++) {
+        Globals.tileExtras[i].push({
+            coordinate: {
+                row: i,
+                col: j,
+            },
+            heat: new Decimal(0),
+            power: new Decimal(0),
+            containment: [],
+            cells: [],
+            reflectors: [],
+            activated: false,
+            enabled: false,
+            updated: false,
+        });
+    }
+}
 
 export const blankGlobals = { ...Globals };

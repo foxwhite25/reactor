@@ -1,11 +1,13 @@
 import { player } from '@/Reactor';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { format } from '@/Utils';
-import { Buildings, Globals, Tabs } from '@/Variables';
+import { Component, Globals, Tabs } from '@/Variables';
 import { visualUpdateBuildings } from '@/UpdateTabs';
-import { BuyBuilding, BuyHolding } from '@/Buildings';
+import { buyComponent, buySelectedComponent, getComponentsDescription } from '@/Components';
+import Decimal from 'break_infinity.js';
+import { toggleComponent } from '@/Toggles';
 
-export const setupMapTable = (): void => {
+export const setupPage = (): void => {
     const table = document.getElementById('map-table') as HTMLTableElement | null;
     if (!table) {
         throw new TypeError('Element with id "map-table" was not found on page?');
@@ -19,30 +21,35 @@ export const setupMapTable = (): void => {
         for (let j = 0; j < Globals.mapWidth; j++) {
             const cell = row.insertCell();
             cell.id = `map-cell-${i}-${j}`;
-            cell.className = 'map-table-cell ' + Globals.buildingClass[player.buildings[i][j].buildingType];
+            const tile = player.tiles[i][j];
+            let k = '';
+            if (tile != null) {
+                k = Globals.componentsData[tile.component].id;
+            }
+            cell.className = `map-table-cell ${k}`;
             if ((i + j) % 2 == 0) {
                 cell.style.backgroundColor = 'var(--frontground-color)';
             } else {
                 cell.style.backgroundColor = 'var(--blue-color)';
             }
             cell.addEventListener('click', (e: MouseEvent) => {
-                BuyHolding(i, j);
+                buySelectedComponent(i, j);
                 if (e.shiftKey) {
                     Globals.shift = true;
                 }
             });
             cell.addEventListener('mouseover', () => {
-                buildingTooltip(i, j);
+                tileTooltip(i, j);
                 if (Globals.shift) {
-                    BuyHolding(i, j);
+                    buySelectedComponent(i, j);
                 }
                 if (Globals.shiftRemove) {
-                    BuyBuilding(i, j, Buildings.Null);
+                    buyComponent(i, j, null);
                 }
             });
             cell.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
-                BuyBuilding(i, j, Buildings.Null);
+                buyComponent(i, j, null);
                 if (e.shiftKey) {
                     Globals.shiftRemove = true;
                 }
@@ -53,6 +60,38 @@ export const setupMapTable = (): void => {
             });
         }
     }
+
+    const componentBox = document.getElementById('buildings-component-table-container');
+    if (componentBox == null) {
+        throw new TypeError('Element with id "buildings-component-table-container" was not found on page?');
+    }
+    const boxRows: HTMLDivElement[] = [];
+    Globals.componentsData.forEach((component, index) => {
+        const className = component.id;
+        if (boxRows.length - 1 < component.row) {
+            for (let i = 0; i < (component.row + 1) - boxRows.length; i++) {
+                const element = document.createElement('div');
+                element.className = 'buildings-component-table-row';
+                componentBox.append(element);
+                boxRows.push(element);
+            }
+        }
+
+        const element = document.createElement('button');
+        element.className = 'component-button ' + className;
+        element.id = className;
+        boxRows[component.row].append(element);
+
+        element.addEventListener('click', () => {
+            toggleComponent(index);
+        });
+        element.addEventListener('mouseover', () => {
+            componentTooltip(index);
+        });
+        element.addEventListener('mouseout', () => {
+            hideTooltip();
+        });
+    });
 };
 
 export const hideStuff = (): void => {
@@ -150,13 +189,23 @@ export const htmlInserts = (): void => {
     visualTab[Globals.currentTab]();
 };
 
-export const buildingTooltip = (row: number, col: number): void => {
-    const building = player.buildings[row][col];
-    showTooltip(Globals.buildingDescriptionFunctions[building.buildingType](building), Globals.buildingName[building.buildingType]);
+export const tileTooltip = (row: number, col: number): void => {
+    const tile = player.tiles[row][col];
+    if (tile != null) {
+        const component = Globals.componentsData[tile.component];
+        showTooltip(getComponentsDescription(component), component.title);
+    } else {
+        showTooltip('You can build stuff here', 'Empty Tile');
+    }
 };
 
-export const componentTooltip = (c: Buildings): void => {
-    showTooltip(Globals.componentDescription[c], Globals.buildingName[c]);
+export const componentTooltip = (component: Component | null): void => {
+    if (component != null) {
+        const componentData = Globals.componentsData[component];
+        showTooltip(getComponentsDescription(componentData), componentData.title);
+    } else {
+        showTooltip('You can build stuff here', 'Empty Tile');
+    }
 };
 
 export const showTooltip = (description: string, title: string): void => {
@@ -167,4 +216,24 @@ export const showTooltip = (description: string, title: string): void => {
 
 export const hideTooltip = (): void => {
     DOMCacheGetOrSet('tooltip').style.display = 'none';
+};
+
+export const processComponentQue = (): void => {
+    for (const componentSet of Globals.componentQue) {
+        const c = componentSet.coordinate;
+        const component = componentSet.component;
+        if (component == null) {
+            player.tiles[c.row][c.col] = null;
+            Globals.tileExtras[c.row][c.col].enabled = false;
+        } else {
+            const componentData = Globals.componentsData[component];
+            player.tiles[c.row][c.col] = {
+                component: component,
+                ticks: 'baseTicks' in componentData ? componentData.baseTicks : new Decimal(0),
+                heatContained: new Decimal(0),
+            };
+            Globals.tileExtras[c.row][c.col].enabled = true;
+        }
+    }
+    Globals.componentQue = [];
 };

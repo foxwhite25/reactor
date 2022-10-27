@@ -1,12 +1,15 @@
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { player } from '@/Reactor';
-import { toggleBuildings, toggleTabs } from '@/Toggles';
+import { toggleTabs } from '@/Toggles';
 import { Globals, Tabs } from '@/Variables';
-import { componentTooltip, hideTooltip } from '@/UpdateHTML';
+import Decimal from 'break_infinity.js';
 
 export const generateEventHandlers = (): void => {
     document.addEventListener('mousemove', (e) => {
         const tooltip = DOMCacheGetOrSet('tooltip');
+        if (tooltip.style.display == 'none') {
+            return;
+        }
 
         // Get calculated ktooltip coordinates and size
 
@@ -46,6 +49,12 @@ export const generateEventHandlers = (): void => {
         player.money = player.money.add(player.power);
         player.power = player.power.mul(0);
     });
+    DOMCacheGetOrSet('dissipate-heat-button').addEventListener('click', () => {
+        player.heat = player.heat.minus(1);
+        if (player.heat.lessThan(0)) {
+            player.heat = new Decimal(0);
+        }
+    });
     DOMCacheGetOrSet('buildings-tab').addEventListener('click', () => {
         toggleTabs(Tabs.Buildings);
     });
@@ -60,20 +69,5 @@ export const generateEventHandlers = (): void => {
     });
     DOMCacheGetOrSet('setting-tab').addEventListener('click', () => {
         toggleTabs(Tabs.Setting);
-    });
-
-    Globals.buildingClass.forEach((className, index) => {
-        if (className == '') {
-            return;
-        }
-        DOMCacheGetOrSet(className).addEventListener('click', () => {
-            toggleBuildings(index);
-        });
-        DOMCacheGetOrSet(className).addEventListener('mouseover', () => {
-            componentTooltip(index);
-        });
-        DOMCacheGetOrSet(className).addEventListener('mouseout', () => {
-            hideTooltip();
-        });
     });
 };

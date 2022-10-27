@@ -414,10 +414,10 @@ button:active {
     background-position: center;
 }
 
-.turbine {
+.wind-turbine {
     background-image: url('Icons/turbine.png');
 }
 
-.solar-panel {
-    background-image: url('Icons/solarPanel.png');
+.vent-1 {
+    background-image: url('Icons/placeholder.png');
 }

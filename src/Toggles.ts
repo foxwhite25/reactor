@@ -1,4 +1,4 @@
-import { Buildings, Globals, Tabs } from '@/Variables';
+import { Component, Globals, Tabs } from '@/Variables';
 import { hideStuff } from '@/UpdateHTML';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 
@@ -14,16 +14,16 @@ export const toggleTabs = (tabs: Tabs): void => {
     }
 };
 
-export const toggleBuildings = (building: Buildings): void => {
-    if (building == Globals.holdBuilding) {
-        Globals.holdBuilding = Buildings.Null;
-        DOMCacheGetOrSet(Globals.buildingClass[building]).style.borderColor = 'var(--blue-color)';
+export const toggleComponent = (component: Component): void => {
+    if (component == Globals.selectorComponent) {
+        Globals.selectorComponent = null;
+        DOMCacheGetOrSet(Globals.componentsData[component].id).style.borderColor = 'var(--blue-color)';
     } else {
-        if (Globals.holdBuilding != Buildings.Null) {
-            DOMCacheGetOrSet(Globals.buildingClass[Globals.holdBuilding]).style.borderColor = 'var(--blue-color)';
+        if (Globals.selectorComponent != null) {
+            DOMCacheGetOrSet(Globals.componentsData[Globals.selectorComponent].id).style.borderColor = 'var(--blue-color)';
         }
-        Globals.holdBuilding = building;
-        DOMCacheGetOrSet(Globals.buildingClass[building]).style.borderColor = 'var(--green-color)';
+        Globals.selectorComponent = component;
+        DOMCacheGetOrSet(Globals.componentsData[component].id).style.borderColor = 'var(--green-color)';
     }
 
     const el = document.activeElement as HTMLElement | null;

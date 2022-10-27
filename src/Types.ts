@@ -1,5 +1,7 @@
 import Decimal from 'break_infinity.js';
-import { Buildings, Tabs } from '@/Variables';
+import { Component, Tabs } from '@/Variables';
+import { Components } from '@/Components';
+import { Tile, TileExtra } from '@/Tile';
 
 export interface Player {
     firstPlayed: string;
@@ -10,36 +12,24 @@ export interface Player {
     heat: Decimal;
     particle: Decimal;
 
-    buildings: BuildingInstance[][];
+    tiles: (Tile | null)[][];
 
     setting: {
         theme: string;
     };
 }
 
-export interface BuildingInstance {
-    row: number;
-    col: number;
-    buildingType: Buildings;
-    heat: Decimal;
-    water: Decimal;
-    durability: Decimal;
-}
-
 export interface GlobalVariables {
     mapWidth: number,
     mapHeight: number,
 
-    buildingClass: string[],
-    buildingTickFunctions: (() => void)[]
-    buildingDescriptionFunctions: ((b: BuildingInstance) => string)[]
-    componentDescription: string[]
-    buildingName: string[]
-    buildingCost: Decimal[]
+    componentsData: Components[]
+    tileExtras: TileExtra[][]
 
     maxPower: Decimal
     maxHeat: Decimal
-    holdBuilding: Buildings
+    selectorComponent: Component | null
+    componentQue: { coordinate: Coordinate, component: Component | null }[]
     shift: boolean
     shiftRemove: boolean
 
@@ -47,3 +37,8 @@ export interface GlobalVariables {
 }
 
 export type PlayerSave = { [P in keyof Player]?: Player[P] | null } & Record<string, unknown>;
+
+export interface Coordinate {
+    row: number;
+    col: number;
+}
