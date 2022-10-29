@@ -1,71 +1,14 @@
-import Decimal from 'break_infinity.js';
-import { format } from '@/Utils';
 import { Component, Globals } from '@/Variables';
 import { player } from '@/Reactor';
-import { componentTooltip, showTooltip } from '@/UpdateHTML';
+import { componentTooltip, hideTooltip, showTooltip } from '@/UpdateHTML';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
-
-interface BaseComponent {
-    id: string;
-    row: number;
-    title: string;
-    baseDescription: string;
-    baseCost: Decimal;
-}
-
-export interface Generator extends BaseComponent {
-    basePower: Decimal;
-    baseHeat: Decimal;
-    baseTicks: Decimal;
-    cells: Decimal;
-}
-
-export interface NeutronReflector extends BaseComponent {
-    basePulse: Decimal;
-}
-
-interface CoolantCell extends BaseComponent {
-    baseMaxHeat: Decimal;
-}
-
-export interface Capacitor extends CoolantCell {
-    baseReactorPower: Decimal;
-}
-
-export interface Vent extends CoolantCell {
-    baseHeatDissipate: Decimal;
-}
-
-export interface HeatExchanger extends CoolantCell {
-    baseTransfer: Decimal;
-}
-
-export interface Plating extends CoolantCell {
-    baseReactorHeat: Decimal;
-    baseReactorProtection: Decimal;
-}
-
-export type Components
-  = Plating
-  | HeatExchanger
-  | Vent
-  | Capacitor
-  | NeutronReflector
-  | Generator
-
-export const getComponentsDescription = (c: Components): string => {
-    return c.baseDescription
-        .replace(/%power/, 'basePower' in c ? `<span style='color: var(--cyan-color)'>${format(c.basePower)}</span>` : 'null')
-        .replace(/%heat-dissipate/, 'baseHeatDissipate' in c ? `<span style='color: var(--red-color)'>${format(c.baseHeatDissipate)}</span>` : 'null')
-        .replace(/%cost/, `<span style='color: var(--yellow-color)'>${format(c.baseCost)}</span>`)
-};
 
 export const buySelectedComponent = (row: number, col: number): void => {
     buyComponent(row, col, Globals.selectorComponent);
 };
 
-export const buyComponent = (row: number, col: number, component: Component | null): void => {
-    if (component != null && player.tiles[row][col] != null) {
+export const buyComponent = (row: number, col: number, component: Component): void => {
+    if (component != Component.Null && player.tiles[row][col].id != '') {
         return;
     }
 
@@ -75,8 +18,8 @@ export const buyComponent = (row: number, col: number, component: Component | nu
         }
     }
 
-    if (component != null && player.money.lessThan(Globals.componentsData[component].baseCost)) {
-        showTooltip('', `<span style='color: var(--red-color)'>You don't have enough money for ${Globals.componentsData[component].title}!</span>`);
+    if (component != Component.Null && player.money.lessThan(Globals.emptyTiles[component].cost)) {
+        showTooltip('', `<span style='color: var(--red-color)'>You don't have enough money for ${Globals.emptyTiles[component].title}!</span>`);
         return;
     }
 
@@ -87,11 +30,15 @@ export const buyComponent = (row: number, col: number, component: Component | nu
             row: row,
         },
     });
-    componentTooltip(component);
+    if (component != Component.Null) {
+        componentTooltip(component);
+    } else {
+        hideTooltip()
+    }
     let classname = 'map-table-cell ';
     if (component != null) {
-        classname += Globals.componentsData[component].id;
-        player.money = player.money.minus(Globals.componentsData[component].baseCost);
+        classname += Globals.emptyTiles[component].id;
+        player.money = player.money.minus(Globals.emptyTiles[component].cost);
     }
     DOMCacheGetOrSet(`map-cell-${row}-${col}`).className = classname;
 };

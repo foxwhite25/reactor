@@ -1,7 +1,6 @@
 import Decimal from 'break_infinity.js';
 import { Component, Tabs } from '@/Variables';
-import { Components } from '@/Components';
-import { Tile, TileExtra } from '@/Tile';
+import { BaseTile } from '@/Tile';
 
 export interface Player {
     firstPlayed: string;
@@ -12,27 +11,34 @@ export interface Player {
     heat: Decimal;
     particle: Decimal;
 
-    tiles: (Tile | null)[][];
+    tiles: BaseTile[][];
 
     setting: {
         theme: string;
+        paused: boolean
+        simulation: boolean
     };
 }
 
 export interface GlobalVariables {
     mapWidth: number,
     mapHeight: number,
-
-    componentsData: Components[]
-    tileExtras: TileExtra[][]
+    offsetCol: number[],
+    offsetRow: number[],
 
     maxPower: Decimal
     maxHeat: Decimal
-    selectorComponent: Component | null
-    componentQue: { coordinate: Coordinate, component: Component | null }[]
+    selectorComponent: Component
+    componentQue: { coordinate: Coordinate, component: Component }[]
+    stats: {
+        heat: Decimal
+        power: Decimal
+    }
+    emptyTiles: BaseTile[]
     shift: boolean
     shiftRemove: boolean
 
+    tooltipIntervalId: number | null
     currentTab: Tabs;
 }
 

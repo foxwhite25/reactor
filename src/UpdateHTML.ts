@@ -3,9 +3,11 @@ import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { format } from '@/Utils';
 import { Component, Globals, Tabs } from '@/Variables';
 import { visualUpdateBuildings } from '@/UpdateTabs';
-import { buyComponent, buySelectedComponent, getComponentsDescription } from '@/Components';
-import Decimal from 'break_infinity.js';
+import { buyComponent, buySelectedComponent } from '@/Components';
 import { toggleComponent } from '@/Toggles';
+import { getTileByComponent } from '@/Tile';
+import { clearInterval, setInterval } from './Timers';
+import { alignTooltip } from '@/EventListener';
 
 export const setupPage = (): void => {
     const table = document.getElementById('map-table') as HTMLTableElement | null;
@@ -22,34 +24,32 @@ export const setupPage = (): void => {
             const cell = row.insertCell();
             cell.id = `map-cell-${i}-${j}`;
             const tile = player.tiles[i][j];
-            let k = '';
-            if (tile != null) {
-                k = Globals.componentsData[tile.component].id;
-            }
-            cell.className = `map-table-cell ${k}`;
+            cell.className = `map-table-cell ${tile.id}`;
             if ((i + j) % 2 == 0) {
                 cell.style.backgroundColor = 'var(--frontground-color)';
             } else {
                 cell.style.backgroundColor = 'var(--blue-color)';
             }
-            cell.addEventListener('click', (e: MouseEvent) => {
+            cell.addEventListener('click', (e) => {
                 buySelectedComponent(i, j);
+                alignTooltip(e)
                 if (e.shiftKey) {
                     Globals.shift = true;
                 }
             });
-            cell.addEventListener('mouseover', () => {
+            cell.addEventListener('mouseover', (e) => {
                 tileTooltip(i, j);
+                alignTooltip(e)
                 if (Globals.shift) {
                     buySelectedComponent(i, j);
                 }
                 if (Globals.shiftRemove) {
-                    buyComponent(i, j, null);
+                    buyComponent(i, j, Component.Null);
                 }
             });
             cell.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
-                buyComponent(i, j, null);
+                buyComponent(i, j, Component.Null);
                 if (e.shiftKey) {
                     Globals.shiftRemove = true;
                 }
@@ -66,10 +66,13 @@ export const setupPage = (): void => {
         throw new TypeError('Element with id "buildings-component-table-container" was not found on page?');
     }
     const boxRows: HTMLDivElement[] = [];
-    Globals.componentsData.forEach((component, index) => {
-        const className = component.id;
-        if (boxRows.length - 1 < component.row) {
-            for (let i = 0; i < (component.row + 1) - boxRows.length; i++) {
+    Globals.emptyTiles.forEach((tile, index) => {
+        const className = tile.id;
+        if (tile.id == '') {
+            return
+        }
+        if (boxRows.length - 1 < tile.row) {
+            for (let i = 0; i < (tile.row + 1) - boxRows.length; i++) {
                 const element = document.createElement('div');
                 element.className = 'buildings-component-table-row';
                 componentBox.append(element);
@@ -80,7 +83,7 @@ export const setupPage = (): void => {
         const element = document.createElement('button');
         element.className = 'component-button ' + className;
         element.id = className;
-        boxRows[component.row].append(element);
+        boxRows[tile.row].append(element);
 
         element.addEventListener('click', () => {
             toggleComponent(index);
@@ -190,21 +193,21 @@ export const htmlInserts = (): void => {
 };
 
 export const tileTooltip = (row: number, col: number): void => {
-    const tile = player.tiles[row][col];
-    if (tile != null) {
-        const component = Globals.componentsData[tile.component];
-        showTooltip(getComponentsDescription(component), component.title);
-    } else {
-        showTooltip('You can build stuff here', 'Empty Tile');
+    const tile = player.tiles[row][col]
+    if (tile.id == '') {
+        return
     }
+    showTooltip(tile.info(row, col), tile.title)
+    Globals.tooltipIntervalId = setInterval(()=>{
+        const tile = player.tiles[row][col];
+        DOMCacheGetOrSet('description-content').innerHTML = tile.info(row, col)
+    }, 100)
 };
 
-export const componentTooltip = (component: Component | null): void => {
-    if (component != null) {
-        const componentData = Globals.componentsData[component];
-        showTooltip(getComponentsDescription(componentData), componentData.title);
-    } else {
-        showTooltip('You can build stuff here', 'Empty Tile');
+export const componentTooltip = (component: Component): void => {
+    const tile = Globals.emptyTiles[component]
+    if (tile.id != '') {
+        showTooltip(tile.info(undefined, undefined), tile.title);
     }
 };
 
@@ -215,6 +218,10 @@ export const showTooltip = (description: string, title: string): void => {
 };
 
 export const hideTooltip = (): void => {
+    if (Globals.tooltipIntervalId != null) {
+        clearInterval(Globals.tooltipIntervalId)
+        Globals.tooltipIntervalId = null
+    }
     DOMCacheGetOrSet('tooltip').style.display = 'none';
 };
 
@@ -222,18 +229,7 @@ export const processComponentQue = (): void => {
     for (const componentSet of Globals.componentQue) {
         const c = componentSet.coordinate;
         const component = componentSet.component;
-        if (component == null) {
-            player.tiles[c.row][c.col] = null;
-            Globals.tileExtras[c.row][c.col].enabled = false;
-        } else {
-            const componentData = Globals.componentsData[component];
-            player.tiles[c.row][c.col] = {
-                component: component,
-                ticks: 'baseTicks' in componentData ? componentData.baseTicks : new Decimal(0),
-                heatContained: new Decimal(0),
-            };
-            Globals.tileExtras[c.row][c.col].enabled = true;
-        }
+        player.tiles[c.row][c.col] = getTileByComponent(component);
     }
     Globals.componentQue = [];
 };

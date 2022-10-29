@@ -3,8 +3,10 @@ import { clearTimers, setInterval } from '@/Timers';
 import { Player } from '@/Types';
 import Decimal from 'break_infinity.js';
 import { htmlInserts, processComponentQue, setupPage } from '@/UpdateHTML';
-import { Globals, Tabs } from '@/Variables';
+import { Component, Globals, Tabs } from '@/Variables';
 import { toggleTabs } from '@/Toggles';
+import { BaseTile, FuelRod } from '@/Tile';
+import { buyComponent } from '@/Components';
 
 export const player: Player = {
     firstPlayed: new Date().toISOString(),
@@ -16,13 +18,15 @@ export const player: Player = {
     tiles: [],
     setting: {
         theme: 'dracula',
+        paused: false,
+        simulation: false,
     },
 };
 
 for (let i = 0; i < Globals.mapHeight; i++) {
     player.tiles.push([]);
     for (let j = 0; j < Globals.mapWidth; j++) {
-        player.tiles[i].push(null);
+        player.tiles[i].push(Globals.emptyTiles[0]);
     }
 }
 
@@ -33,8 +37,68 @@ window.addEventListener('load', () => {
     void reload();
 });
 
+export const tick = (): boolean => {
+    Globals.stats.power = new Decimal(0)
+    Globals.stats.heat = new Decimal(0)
+    Globals.maxHeat = new Decimal(500)
+
+    let stopSimulation = true
+
+    for (let i = 0; i < Globals.mapHeight; i++) {
+        for (let j = 0; j < Globals.mapWidth; j++) {
+            const tile = player.tiles[i][j]
+
+            if (tile.id == '') {
+                continue
+            }
+
+            tile.tickPre(i, j)
+
+            if (tile.isTileBroken()) {
+                buyComponent(i, j, Component.Null)
+            }
+        }
+    }
+    for (let i = 0; i < Globals.mapHeight; i++) {
+        for (let j = 0; j < Globals.mapWidth; j++) {
+            const tile = player.tiles[i][j]
+
+            if (tile.id == '') {
+                continue
+            }
+
+            tile.tickPost(i, j)
+
+            if (tile.isTileBroken()) {
+                buyComponent(i, j, Component.Null)
+            }
+        }
+    }
+    for (let i = 0; i < Globals.mapHeight; i++) {
+        for (let j = 0; j < Globals.mapWidth; j++) {
+            const tile = player.tiles[i][j]
+
+            if (tile.id == '') {
+                continue
+            }
+
+            if (tile.isTileBroken()) {
+                buyComponent(i, j, Component.Null)
+            } else if (player.setting.simulation && stopSimulation && tile instanceof FuelRod) {
+                stopSimulation = false
+            }
+        }
+    }
+    if (!player.setting.simulation) {
+        player.heat = player.heat.add(Globals.stats.heat)
+        player.power = player.power.add(Globals.stats.power)
+    }
+    return stopSimulation
+}
+
 export const updateAll = (): void => {
     processComponentQue();
+    tick();
 
     if (player.power.greaterThan(Globals.maxPower)) {
         player.power = Globals.maxPower;
@@ -52,7 +116,7 @@ export const slowUpdates = (): void => {
 
 export const constantIntervals = (): void => {
     setInterval(slowUpdates, 200);
-    setInterval(fastUpdates, 50);
+    setInterval(fastUpdates, 100);
 };
 
 export const reload = async (reset = false): Promise<void> => {
@@ -68,3 +132,36 @@ export const reload = async (reset = false): Promise<void> => {
         return;
     }
 };
+
+export const addHeat = (heat: Decimal): void => {
+    Globals.stats.heat = Decimal.max(Globals.stats.heat.add(heat), 0)
+}
+
+export const addPower = (power: Decimal): void => {
+    Globals.stats.power = Decimal.max(Globals.stats.power.add(power), 0)
+}
+
+export const distributeHeat = (around: BaseTile[], heat: Decimal) :void => {
+    const list: BaseTile[] = []
+    let first: BaseTile = {} as BaseTile
+
+    around.map((tile) => {
+        if (tile.isHeatAcceptor()) {
+            list.push(tile)
+
+            if (first == {} as BaseTile){
+                first = tile
+            }
+        }
+    })
+
+    if (list.length == 0){
+        addHeat(heat)
+        return;
+    }
+
+    list.map((tile) => {
+        tile.damageTile(heat.divide(list.length))
+    })
+    return
+}

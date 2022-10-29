@@ -108,6 +108,7 @@
     "dependencies": {
         "break_infinity.js": "^2.0.0",
         "localforage": "^1.10.0",
+        "lodash": "^4.17.21",
         "lz-string": "^1.4.4",
         "worker-timers": "^7.0.54"
     }

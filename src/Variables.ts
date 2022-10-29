@@ -1,5 +1,6 @@
 import { GlobalVariables } from '@/Types';
 import Decimal from 'break_infinity.js';
+import { getTileByComponent } from '@/Tile';
 
 export enum Tabs {
     Buildings,
@@ -10,6 +11,7 @@ export enum Tabs {
 }
 
 export enum Component {
+    Null,
     WindTurbine,
     Vent_1
 }
@@ -17,60 +19,28 @@ export enum Component {
 export const Globals: GlobalVariables = {
     mapWidth: 34,
     mapHeight: 17,
-
-
-    componentsData: [
-        {
-            id: 'wind-turbine',
-            title: 'Wind Turbine',
-            row: 0,
-            baseDescription: 'Cost: %cost <br>Generate %power power',
-            baseCost: new Decimal(10),
-            basePower: new Decimal(1),
-            baseHeat: new Decimal(0),
-            baseTicks: new Decimal(30),
-            cells: new Decimal(0),
-        },
-        {
-            id: 'vent-1',
-            title: 'Standard Vent',
-            row: 0,
-            baseDescription: 'Cost: %cost <br>Vent %heat-dissipate heat.',
-            baseCost: new Decimal(10),
-            baseMaxHeat: new Decimal(1),
-            baseHeatDissipate: new Decimal(1),
-        },
-    ],
-    tileExtras: [],
+    offsetCol: [0, 0, 1, -1],
+    offsetRow: [1, -1, 0, 0],
 
     maxPower: new Decimal(500),
     maxHeat: new Decimal(500),
-    selectorComponent: null,
+    selectorComponent: Component.Null,
     componentQue: [],
+    stats: {
+        power: new Decimal(0),
+        heat: new Decimal(0)
+    },
+    emptyTiles: Object.values(Component).filter((c) => typeof c != 'string').map((c) => {
+        if (typeof c == 'string') {
+            return getTileByComponent(Component.Null)
+        }
+        return getTileByComponent(c)
+    }),
     shift: false,
     shiftRemove: false,
 
+    tooltipIntervalId: null,
     currentTab: Tabs.Buildings,
 };
-
-for (let i = 0; i < Globals.mapHeight; i++) {
-    Globals.tileExtras.push([]);
-    for (let j = 0; j < Globals.mapWidth; j++) {
-        Globals.tileExtras[i].push({
-            coordinate: {
-                row: i,
-                col: j,
-            },
-            heat: new Decimal(0),
-            power: new Decimal(0),
-            containment: [],
-            cells: [],
-            reflectors: [],
-            activated: false,
-            enabled: false,
-            updated: false,
-        });
-    }
-}
 
 export const blankGlobals = { ...Globals };
