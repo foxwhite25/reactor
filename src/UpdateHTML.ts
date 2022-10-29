@@ -211,7 +211,7 @@ export const tileTooltip = (row: number, col: number): void => {
     Globals.tooltipIntervalId = setInterval(()=>{
         const tile = player.tiles[row][col];
         DOMCacheGetOrSet('description-content').innerHTML = tile.info(row, col)
-    }, 100)
+    }, 10)
 };
 
 export const componentTooltip = (component: Component): void => {

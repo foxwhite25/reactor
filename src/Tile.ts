@@ -124,18 +124,18 @@ export class FuelRod extends BaseTile {
             return;
         }
 
-        const pulse = this.pulses;
+        let pulse = this.pulses;
         const around: BaseTile[] = [];
 
         for (let i = 0; i < 4; i++) {
             const t = player.tiles[row + Globals.offsetRow[i]][col + Globals.offsetCol[i]];
-            if (t == null) {
+            if (t.id == '') {
                 continue;
             }
             around.push(t);
 
             if (t instanceof FuelRod || t instanceof NeutronReflector) {
-                pulse.add(t.reflect);
+                pulse = pulse.add(t.reflect);
             }
         }
 
@@ -144,16 +144,20 @@ export class FuelRod extends BaseTile {
         this.damageTile(new Decimal(1));
     }
 
-    info(col: number | undefined, row: number | undefined): string {
+    info(row: number | undefined, col: number | undefined): string {
         let output = `Cost: <span style='color: var(--yellow-color)'>${format(this.cost)}$</span><br>`
         output += `Lifespan: <span style='color: var(--green-color)'>${format(this.maxDamage.minus(this.damage))}</span> ticks <br>`
 
-        const pulse = this.pulses;
+        let pulse = this.pulses;
+
         if (col != undefined && row != undefined) {
             for (let i = 0; i < 4; i++) {
+                if (row + Globals.offsetRow[i] < 0 && col + Globals.offsetCol[i] < 0) {
+                    continue
+                }
                 const t = player.tiles[row + Globals.offsetRow[i]][col + Globals.offsetCol[i]];
                 if (t instanceof FuelRod || t instanceof NeutronReflector) {
-                    pulse.add(t.reflect);
+                    pulse = pulse.add(t.reflect);
                 }
             }
         }
@@ -329,7 +333,7 @@ export const getTileByComponent = (component: Component): BaseTile => {
         case Component.WindTurbine:
             return new FuelRod(
                 'wind-turbine', 'Wind Turbine', 0,
-                new Decimal(0), new Decimal(30), new Decimal(10),
+                new Decimal(0), new Decimal(30000), new Decimal(10),
                 1, new Decimal(1), new Decimal(1),
             );
         case Component.Vent_1:

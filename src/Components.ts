@@ -1,6 +1,6 @@
 import { Component, Globals } from '@/Variables';
 import { player } from '@/Reactor';
-import { componentTooltip, hideTooltip, showTooltip } from '@/UpdateHTML';
+import { hideTooltip, showTooltip, tileTooltip } from '@/UpdateHTML';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { getTileByComponent } from '@/Tile';
 
@@ -8,8 +8,7 @@ export const buySelectedComponent = (row: number, col: number): void => {
     buyComponent(row, col, Globals.selectorComponent);
 };
 
-export const buyComponent = (row: number, col: number, component: Component, immediate = false): void => {
-    console.log(row, col, component)
+export const buyComponent = (row: number, col: number, component: Component, immediate = true): void => {
     if (component != Component.Null && player.tiles[row][col].id != '') {
         return;
     }
@@ -40,7 +39,7 @@ export const buyComponent = (row: number, col: number, component: Component, imm
     }
 
     if (component != Component.Null) {
-        componentTooltip(component);
+        tileTooltip(row, col);
     } else {
         hideTooltip()
     }

@@ -3,7 +3,7 @@ import { clearTimers, setInterval, setTimeout } from '@/Timers';
 import { Player } from '@/Types';
 import Decimal from 'break_infinity.js';
 import { htmlInserts, processComponentQue, setupPage } from '@/UpdateHTML';
-import { Component, Globals, Tabs } from '@/Variables';
+import { blankGlobals, Component, Globals, Tabs } from '@/Variables';
 import { toggleTabs } from '@/Toggles';
 import { BaseTile, FuelRod } from '@/Tile';
 import { buyComponent } from '@/Components';
@@ -11,8 +11,8 @@ import { DOMCacheGetOrSet } from '@/Cache/DOM';
 
 export const player: Player = {
     firstPlayed: new Date().toISOString(),
-    money: new Decimal(10),
-    heat: new Decimal(480),
+    money: new Decimal(1000),
+    heat: new Decimal(0),
     research: new Decimal(0),
     power: new Decimal(0),
     particle: new Decimal(0),
@@ -41,7 +41,7 @@ window.addEventListener('load', () => {
 export const tick = (): boolean => {
     Globals.stats.power = new Decimal(0)
     Globals.stats.heat = new Decimal(0)
-    Globals.maxHeat = new Decimal(500)
+    Globals.maxHeat = blankGlobals.maxHeat
 
     let stopSimulation = true
 

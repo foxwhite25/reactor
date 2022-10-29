@@ -22,8 +22,8 @@ export const Globals: GlobalVariables = {
     offsetCol: [0, 0, 1, -1],
     offsetRow: [1, -1, 0, 0],
 
-    maxPower: new Decimal(500),
-    maxHeat: new Decimal(500),
+    maxPower: new Decimal(50000),
+    maxHeat: new Decimal(50000),
     selectorComponent: Component.Null,
     componentQue: [],
     stats: {
