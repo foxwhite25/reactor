@@ -140,6 +140,26 @@ textarea {
     background-color: var(--frontground-color);
 }
 
+.durability-bar-container {
+    position: relative;
+    width: 28px;
+    height: 2px;
+    margin: 26px 2px 0;
+    overflow: hidden;
+    text-align: right;
+}
+
+.durability-bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: none;
+    width: 100%;
+    background: var(--yellow-color);
+    transition: all 0.1s;
+}
+
 #power-bar {
     position: absolute;
     top: 0;

@@ -35,11 +35,20 @@ export const buyComponent = (row: number, col: number, component: Component): vo
     } else {
         hideTooltip()
     }
+
     let classname = 'map-table-cell ';
-    if (component != null) {
-        classname += Globals.emptyTiles[component].id;
-        player.money = player.money.minus(Globals.emptyTiles[component].cost);
+    if (Globals.emptyTiles[component].maxDamage.greaterThan(0)) {
+        DOMCacheGetOrSet(`map-bar-${row}-${col}`).style.display = 'initial'
+        if (Globals.emptyTiles[component].isCoolant()) {
+            DOMCacheGetOrSet(`map-bar-${row}-${col}`).style.backgroundColor = 'var(--red-color)'
+        } else {
+            DOMCacheGetOrSet(`map-bar-${row}-${col}`).style.backgroundColor = 'var(--green-color)'
+        }
+    } else {
+        DOMCacheGetOrSet(`map-bar-${row}-${col}`).style.display = 'none'
     }
+    classname += Globals.emptyTiles[component].id;
+    player.money = player.money.minus(Globals.emptyTiles[component].cost);
     DOMCacheGetOrSet(`map-cell-${row}-${col}`).className = classname;
 };
 

@@ -58,6 +58,16 @@ export const setupPage = (): void => {
             cell.addEventListener('mouseout', () => {
                 hideTooltip();
             });
+
+            const barContainer = document.createElement('div')
+            barContainer.className = 'durability-bar-container'
+
+            const bar = document.createElement('div')
+            bar.id = `map-bar-${i}-${j}`;
+            bar.className = 'durability-bar'
+            barContainer.append(bar)
+
+            cell.append(barContainer)
         }
     }
 
