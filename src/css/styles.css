@@ -464,6 +464,11 @@ div.nuke.burn {
     opacity: 1;
 }
 
+div.nuke.done {
+    text-shadow: 0 -2px 0 #fff !important;
+    opacity: 0 !important;
+}
+
 div.nuke.burn::before {
     position: absolute;
     top: 60%;

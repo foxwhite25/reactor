@@ -12,7 +12,7 @@ import { DOMCacheGetOrSet } from '@/Cache/DOM';
 export const player: Player = {
     firstPlayed: new Date().toISOString(),
     money: new Decimal(10),
-    heat: new Decimal(222),
+    heat: new Decimal(480),
     research: new Decimal(0),
     power: new Decimal(0),
     particle: new Decimal(0),
@@ -166,12 +166,15 @@ export const blowUp = ():void => {
         nuke.className += ' b';
     }, 600);
     setTimeout(() => {
+        nuke.className += ' done';
+    }, 2000);
+    setTimeout(() => {
         player.power = new Decimal(0)
         player.heat = new Decimal(0)
         player.setting.paused = false
         DOMCacheGetOrSet('body').className = DOMCacheGetOrSet('body').className.replace(' nuke', '');
         nuke.remove()
-    }, 4000);
+    }, 3500);
 }
 
 export const distributeHeat = (around: BaseTile[], heat: Decimal) :void => {
