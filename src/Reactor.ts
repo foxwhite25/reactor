@@ -1,5 +1,5 @@
 import { generateEventHandlers } from '@/EventListener';
-import { clearTimers, setInterval } from '@/Timers';
+import { clearTimers, setInterval, setTimeout } from '@/Timers';
 import { Player } from '@/Types';
 import Decimal from 'break_infinity.js';
 import { htmlInserts, processComponentQue, setupPage } from '@/UpdateHTML';
@@ -7,6 +7,7 @@ import { Component, Globals, Tabs } from '@/Variables';
 import { toggleTabs } from '@/Toggles';
 import { BaseTile, FuelRod } from '@/Tile';
 import { buyComponent } from '@/Components';
+import { DOMCacheGetOrSet } from '@/Cache/DOM';
 
 export const player: Player = {
     firstPlayed: new Date().toISOString(),
@@ -100,6 +101,10 @@ export const updateAll = (): void => {
     processComponentQue();
     tick();
 
+    if (player.heat.greaterThan(Globals.maxHeat)) {
+        blowUp()
+    }
+
     if (player.power.greaterThan(Globals.maxPower)) {
         player.power = Globals.maxPower;
     }
@@ -139,6 +144,34 @@ export const addHeat = (heat: Decimal): void => {
 
 export const addPower = (power: Decimal): void => {
     Globals.stats.power = Decimal.max(Globals.stats.power.add(power), 0)
+}
+
+export const blowUp = ():void => {
+    player.setting.paused = true
+    for (let i = 0; i < Globals.mapHeight; i++) {
+        for (let j = 0; j < Globals.mapWidth; j++) {
+            buyComponent(i, j, Component.Null, true);
+        }
+    }
+    player.power = new Decimal(0)
+    player.heat = new Decimal(0)
+    DOMCacheGetOrSet('body').className += ' nuke'
+    const nuke = document.createElement('div')
+    nuke.className = 'nuke'
+    DOMCacheGetOrSet('body').append(nuke);
+    setTimeout(() => {
+        nuke.className += ' burn';
+    }, 500);
+    setTimeout(() => {
+        nuke.className += ' b';
+    }, 600);
+    setTimeout(() => {
+        player.power = new Decimal(0)
+        player.heat = new Decimal(0)
+        player.setting.paused = false
+        DOMCacheGetOrSet('body').className = DOMCacheGetOrSet('body').className.replace(' nuke', '');
+        nuke.remove()
+    }, 4000);
 }
 
 export const distributeHeat = (around: BaseTile[], heat: Decimal) :void => {

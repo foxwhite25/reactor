@@ -2,19 +2,23 @@ import { Component, Globals } from '@/Variables';
 import { player } from '@/Reactor';
 import { componentTooltip, hideTooltip, showTooltip } from '@/UpdateHTML';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
+import { getTileByComponent } from '@/Tile';
 
 export const buySelectedComponent = (row: number, col: number): void => {
     buyComponent(row, col, Globals.selectorComponent);
 };
 
-export const buyComponent = (row: number, col: number, component: Component): void => {
+export const buyComponent = (row: number, col: number, component: Component, immediate = false): void => {
+    console.log(row, col, component)
     if (component != Component.Null && player.tiles[row][col].id != '') {
         return;
     }
 
-    for (const buildingQueElement of Globals.componentQue) {
-        if (buildingQueElement.coordinate.col == row && buildingQueElement.coordinate.col == row) {
-            return;
+    if (!immediate) {
+        for (const buildingQueElement of Globals.componentQue) {
+            if (buildingQueElement.coordinate.col == row && buildingQueElement.coordinate.col == row) {
+                return;
+            }
         }
     }
 
@@ -23,13 +27,18 @@ export const buyComponent = (row: number, col: number, component: Component): vo
         return;
     }
 
-    Globals.componentQue.push({
-        component: component,
-        coordinate: {
-            col: col,
-            row: row,
-        },
-    });
+    if (!immediate) {
+        Globals.componentQue.push({
+            component: component,
+            coordinate: {
+                col: col,
+                row: row,
+            },
+        });
+    } else {
+        player.tiles[row][col] = getTileByComponent(component);
+    }
+
     if (component != Component.Null) {
         componentTooltip(component);
     } else {
