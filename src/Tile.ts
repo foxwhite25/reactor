@@ -199,8 +199,8 @@ export class NeutronReflector extends BaseTile {
 
     info(): string {
         let output = `Cost: <span style='color: var(--yellow-color)'>${format(this.cost)}$</span><br>`
-        output += `Durability: <span style='color: var(--green-color)'>${format(this.maxDamage.minus(this.damage))}</span> pulses <br>`
-        output += `Efficiency: <span style='color: var(--pink-color)'>${format(this.maxDamage.minus(this.damage))}</span> pulses <br>`
+        output += `Durability: <span style='color: var(--green-color)'>${this.maxDamage.equals(0) ? 'Infinite' : format(this.maxDamage.minus(this.damage))}</span> pulses <br>`
+        output += `Efficiency: <span style='color: var(--pink-color)'>${format(this.reflect)}</span><br>`
         return output
     }
 }
@@ -449,6 +449,42 @@ export const getTileByComponent = (component: Component): BaseTile => {
                 'he-r', 'Reactor Heat Exchanger', 2,
                 new Decimal(0), new Decimal(5000), new Decimal(10),
                 new Decimal(0), new Decimal(72)
+            )
+        case Component.NeutronReflector:
+            return new NeutronReflector(
+                'neutron', 'Neutron Reflector', 3,
+                new Decimal(0), new Decimal(10000), new Decimal(10),
+                new Decimal(1)
+            )
+        case Component.ThickNeutronReflector:
+            return new NeutronReflector(
+                'neutron-thick', 'Thick Neutron Reflector', 3,
+                new Decimal(0), new Decimal(50000), new Decimal(10),
+                new Decimal(1)
+            )
+        case Component.IridiumNeutronReflector:
+            return new NeutronReflector(
+                'neutron-iridium', 'Iridium Neutron Reflector', 3,
+                new Decimal(0), new Decimal(0), new Decimal(10),
+                new Decimal(1)
+            )
+        case Component.ReactorPlating:
+            return new ReactorPlating(
+                'reactor-plating', 'Reactor Plating', 4,
+                new Decimal(0), new Decimal(0), new Decimal(10),
+                new Decimal(1000)
+            )
+        case Component.ContainmentPlating:
+            return new ReactorPlating(
+                'reactor-plating-containment', 'Containment Reactor Plating', 4,
+                new Decimal(0), new Decimal(0), new Decimal(10),
+                new Decimal(500)
+            )
+        case Component.HeatPlating:
+            return new ReactorPlating(
+                'reactor-plating-heat', 'Heat Capacity Reactor Plating', 4,
+                new Decimal(0), new Decimal(0), new Decimal(10),
+                new Decimal(10000)
             )
     }
 };

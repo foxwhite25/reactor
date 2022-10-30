@@ -18,7 +18,13 @@ export enum Component {
     HeatExchanger_1,
     HeatExchanger_2,
     HeatExchangerComponent,
-    HeatExchangerReactor
+    HeatExchangerReactor,
+    NeutronReflector,
+    ThickNeutronReflector,
+    IridiumNeutronReflector,
+    ReactorPlating,
+    ContainmentPlating,
+    HeatPlating
 }
 
 export const Globals: GlobalVariables = {

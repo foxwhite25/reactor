@@ -46,12 +46,14 @@ export const buyComponent = (row: number, col: number, component: Component, imm
 
     let classname = 'map-table-cell ';
     if (Globals.emptyTiles[component].maxDamage.greaterThan(0)) {
-        DOMCacheGetOrSet(`map-bar-${row}-${col}`).style.display = 'initial'
         if (Globals.emptyTiles[component].isCoolant()) {
+            DOMCacheGetOrSet(`map-bar-${row}-${col}`).style.width = '0%';
             DOMCacheGetOrSet(`map-bar-${row}-${col}`).style.backgroundColor = 'var(--red-color)'
         } else {
+            DOMCacheGetOrSet(`map-bar-${row}-${col}`).style.width = '100%';
             DOMCacheGetOrSet(`map-bar-${row}-${col}`).style.backgroundColor = 'var(--green-color)'
         }
+        DOMCacheGetOrSet(`map-bar-${row}-${col}`).style.display = 'initial'
     } else {
         DOMCacheGetOrSet(`map-bar-${row}-${col}`).style.display = 'none'
     }
