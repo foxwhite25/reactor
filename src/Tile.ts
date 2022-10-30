@@ -410,7 +410,7 @@ export const getTileByComponent = (component: Component): BaseTile => {
             )
         case Component.WindTurbine:
             return new FuelRod(
-                'wind-turbine', 'Wind Turbine', 0,
+                'wind-turbine', 'Quad Uranium FuelRod', 0,
                 new Decimal(0), new Decimal(30000), new Decimal(10),
                 4, new Decimal(20), new Decimal(8),
             );

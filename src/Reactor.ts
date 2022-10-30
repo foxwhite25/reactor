@@ -106,7 +106,11 @@ export const tick = (): boolean => {
 
 export const updateAll = (): void => {
     processComponentQue();
-    tick();
+    try {
+        tick();
+    } catch (e) {
+        console.log('errored tick', e);
+    }
 
     if (player.heat.greaterThan(Globals.maxHeat)) {
         blowUp()

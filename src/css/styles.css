@@ -399,6 +399,7 @@ button:active {
     margin: 2px;
     background-repeat: no-repeat;
     background-position: center;
+    background-size: contain;
     border: var(--blue-color) solid;
     border-radius: 5px;
 }
@@ -432,34 +433,35 @@ button:active {
     cursor: pointer;
     background-repeat: no-repeat;
     background-position: center;
+    background-size: contain;
 }
 
 .wind-turbine {
-    background-image: url('Icons/turbine.png');
+    background-image: url('Icons/quad_uranium_fuel_rod.png');
 }
 
 .vent-1 {
-    background-image: url('Icons/placeholder.png');
+    background-image: url('Icons/heat_vent.png');
 }
 
 .vent-2 {
-    background-image: url('Icons/placeholder.png');
+    background-image: url('Icons/overclocked_heat_vent.png');
 }
 
 .he-1 {
-    background-image: url('Icons/placeholder.png');
+    background-image: url('Icons/heat_exchanger.png');
 }
 
 .he-2 {
-    background-image: url('Icons/placeholder.png');
+    background-image: url('Icons/advanced_heat_exchanger.png');
 }
 
 .he-r {
-    background-image: url('Icons/placeholder.png');
+    background-image: url('Icons/reactor_heat_exchanger.png');
 }
 
 .he-c {
-    background-image: url('Icons/placeholder.png');
+    background-image: url('Icons/component_heat_exchanger.png');
 }
 
 body.nuke {

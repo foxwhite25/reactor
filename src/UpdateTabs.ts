@@ -13,7 +13,11 @@ export const visualUpdateBuildings = (): void => {
                 return
             }
             const bar = DOMCacheGetOrSet(`map-bar-${i}-${j}`)
-            bar.style.width = `${format((tile.maxDamage.minus(tile.damage)).divide(tile.maxDamage).multiply(100))}%`
+            if (tile.isCoolant()) {
+                bar.style.width = `${format((tile.damage.divide(tile.maxDamage).multiply(100)))}%`;
+            } else {
+                bar.style.width = `${format((tile.maxDamage.minus(tile.damage)).divide(tile.maxDamage).multiply(100))}%`;
+            }
         })
     })
 };
