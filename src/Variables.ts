@@ -15,6 +15,10 @@ export enum Component {
     WindTurbine,
     Vent_1,
     Vent_2,
+    HeatExchanger_1,
+    HeatExchanger_2,
+    HeatExchangerComponent,
+    HeatExchangerReactor
 }
 
 export const Globals: GlobalVariables = {
@@ -27,6 +31,7 @@ export const Globals: GlobalVariables = {
     maxHeat: new Decimal(50000),
     selectorComponent: Component.Null,
     componentQue: [],
+    vents: [],
     stats: {
         power: new Decimal(0),
         heat: new Decimal(0)

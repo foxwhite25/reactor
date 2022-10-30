@@ -1,6 +1,6 @@
 import Decimal from 'break_infinity.js';
 import { Component, Tabs } from '@/Variables';
-import { BaseTile } from '@/Tile';
+import { BaseTile, HeatVent } from '@/Tile';
 
 export interface Player {
     firstPlayed: string;
@@ -30,6 +30,7 @@ export interface GlobalVariables {
     maxHeat: Decimal
     selectorComponent: Component
     componentQue: { coordinate: Coordinate, component: Component }[]
+    vents: HeatVent[]
     stats: {
         heat: Decimal
         power: Decimal

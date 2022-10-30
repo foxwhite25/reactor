@@ -271,7 +271,7 @@ a:visited {
     position: absolute;
     z-index: 1000;
     display: none;
-    width: 200px;
+    width: 250px;
     height: 100px;
     padding: 10px;
     margin-left: 28px;
@@ -443,6 +443,22 @@ button:active {
 }
 
 .vent-2 {
+    background-image: url('Icons/placeholder.png');
+}
+
+.he-1 {
+    background-image: url('Icons/placeholder.png');
+}
+
+.he-2 {
+    background-image: url('Icons/placeholder.png');
+}
+
+.he-r {
+    background-image: url('Icons/placeholder.png');
+}
+
+.he-c {
     background-image: url('Icons/placeholder.png');
 }
 

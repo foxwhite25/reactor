@@ -227,7 +227,7 @@ export class HeatVent extends BaseTile {
 
     tickPre(row: number, col: number): void {
         if (this.reactorCooling.greaterThan(0)) {
-            addHeat(this.reactorCooling.neg());
+            Globals.vents.push(this)
         }
 
         if (this.selfCooling.greaterThan(0)) {
@@ -267,6 +267,84 @@ export class HeatVent extends BaseTile {
             output += `Component Cooling: <span style='color: var(--red-color)'>${format(this.componentCooling)}</span> heat <br>`
         }
         return output;
+    }
+}
+
+export class HeatExchanger extends BaseTile {
+    heatTransferToAdjacent: Decimal;
+    heatTransferToCore: Decimal;
+
+    constructor(
+        id: string, title: string, row: number, damage: Decimal,
+        maxDamage: Decimal, cost: Decimal, heatTransferToAdjacent: Decimal,
+        heatTransferToCore: Decimal,
+    ) {
+        super(id, title, row, damage, maxDamage, cost);
+        this.heatTransferToAdjacent = heatTransferToAdjacent;
+        this.heatTransferToCore = heatTransferToCore;
+    }
+
+    isHeatAcceptor(): boolean {
+        return this.maxDamage.greaterThan(0);
+    }
+
+    info(): string {
+        let output = `Cost: <span style='color: var(--yellow-color)'>${format(this.cost)}$</span><br>`
+        if (this.maxDamage.greaterThan(0)) {
+            output += `Coolent: <span style='color: var(--red-color)'>${format(this.maxDamage.minus(this.damage))}</span> heat <br>`
+        }
+        if (this.heatTransferToCore.greaterThan(0)) {
+            output += `Heat Transfer to Core: <span style='color: var(--red-color)'>${format(this.heatTransferToCore)}</span> heat <br>`
+        }
+        if (this.heatTransferToAdjacent.greaterThan(0)) {
+            output += `Heat Transfer to Adjacent: <span style='color: var(--red-color)'>${format(this.heatTransferToAdjacent)}</span> heat <br>`
+        }
+        return output
+    }
+
+    tickPre(row: number, col: number): void {
+        let damage = new Decimal(0)
+
+        if (this.heatTransferToAdjacent.greaterThan(0)) {
+            for (let i = 0; i < 4; i++) {
+                const t = player.tiles[row + Globals.offsetRow[i]][col + Globals.offsetCol[i]];
+
+                if (t.isHeatAcceptor()) {
+                    const sh = this.getRelativeDamage().multiply(100)
+                    const rh = t.getRelativeDamage().multiply(100)
+                    const heat = this.getHeatTransfer(sh, rh, t.maxDamage, this.heatTransferToAdjacent)
+                    damage = damage.subtract(heat)
+                    damage = damage.plus(t.damageTile(heat))
+                }
+            }
+        }
+
+        if (this.heatTransferToCore.greaterThan(0)) {
+            const sh = this.getRelativeDamage().multiply(100)
+            const rh = player.heat.multiply(100).divide(Globals.maxHeat)
+            const heat = this.getHeatTransfer(sh, rh, Globals.maxHeat, this.heatTransferToCore)
+            addHeat(heat)
+            damage = damage.subtract(heat)
+        }
+
+        this.damageTile(damage)
+    }
+
+    tickPost(): void {
+        return
+    }
+
+    getHeatTransfer(sh: Decimal, rh: Decimal, max: Decimal, transfer: Decimal) : Decimal {
+        const hh = (rh.plus(sh)).divide(2)
+        let add = (max.multiply(hh).divide(100)).min(transfer)
+
+        if (rh.greaterThan(sh)) {
+            add = add.subtract(add.multiply(2))
+        } else if (rh.equals(sh)) {
+            add = new Decimal(0)
+        }
+
+        return add
     }
 }
 
@@ -348,6 +426,30 @@ export const getTileByComponent = (component: Component): BaseTile => {
                 new Decimal(0), new Decimal(1000), new Decimal(10),
                 new Decimal(24), new Decimal(36), new Decimal(0),
             );
+        case Component.HeatExchanger_1:
+            return new HeatExchanger(
+                'he-1', 'Heat Exchanger', 2,
+                new Decimal(0), new Decimal(2500), new Decimal(10),
+                new Decimal(12), new Decimal(4)
+            )
+        case Component.HeatExchanger_2:
+            return new HeatExchanger(
+                'he-2', 'Advanced Heat Exchanger', 2,
+                new Decimal(0), new Decimal(10000), new Decimal(10),
+                new Decimal(24), new Decimal(8)
+            )
+        case Component.HeatExchangerComponent:
+            return new HeatExchanger(
+                'he-c', 'Component Heat Exchanger', 2,
+                new Decimal(0), new Decimal(5000), new Decimal(10),
+                new Decimal(36), new Decimal(0)
+            )
+        case Component.HeatExchangerReactor:
+            return new HeatExchanger(
+                'he-r', 'Reactor Heat Exchanger', 2,
+                new Decimal(0), new Decimal(5000), new Decimal(10),
+                new Decimal(0), new Decimal(72)
+            )
     }
 };
 

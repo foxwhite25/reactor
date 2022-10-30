@@ -8,6 +8,7 @@ import { toggleTabs } from '@/Toggles';
 import { BaseTile, FuelRod } from '@/Tile';
 import { buyComponent } from '@/Components';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
+import { format } from '@/Utils';
 
 export const player: Player = {
     firstPlayed: new Date().toISOString(),
@@ -41,6 +42,7 @@ window.addEventListener('load', () => {
 export const tick = (): boolean => {
     Globals.stats.power = new Decimal(0)
     Globals.stats.heat = new Decimal(0)
+    Globals.vents.length = 0
     Globals.maxHeat = blankGlobals.maxHeat
 
     let stopSimulation = true
@@ -75,6 +77,14 @@ export const tick = (): boolean => {
             }
         }
     }
+
+    if (player.heat.greaterThan(0)) {
+        distributeVent()
+    }
+    player.heat = Decimal.max(player.heat.add(Globals.stats.heat), 0)
+    player.power = Decimal.max(player.power.add(Globals.stats.power), 0)
+
+
     for (let i = 0; i < Globals.mapHeight; i++) {
         for (let j = 0; j < Globals.mapWidth; j++) {
             const tile = player.tiles[i][j]
@@ -90,10 +100,7 @@ export const tick = (): boolean => {
             }
         }
     }
-    if (!player.setting.simulation) {
-        player.heat = Decimal.max(player.heat.add(Globals.stats.heat), 0)
-        player.power = Decimal.max(player.power.add(Globals.stats.power), 0)
-    }
+
     return stopSimulation
 }
 
@@ -179,15 +186,10 @@ export const blowUp = ():void => {
 
 export const distributeHeat = (around: BaseTile[], heat: Decimal) :void => {
     const list: BaseTile[] = []
-    let first: BaseTile = {} as BaseTile
 
     around.map((tile) => {
         if (tile.isHeatAcceptor()) {
             list.push(tile)
-
-            if (first == {} as BaseTile){
-                first = tile
-            }
         }
     })
 
@@ -206,4 +208,17 @@ export const distributeHeat = (around: BaseTile[], heat: Decimal) :void => {
         addHeat(tile.damageTile(heat.multiply(weights[i].divide(sum))))
     })
     return
+}
+
+const distributeVent = () :void => {
+    const vents = Globals.vents
+    let heatRemoved = new Decimal(0)
+
+    vents.map((vent)=>{
+        const heat = player.heat.divide(vents.length).min(vent.reactorCooling)
+        console.log(format(player.heat), vents.length, format(heat))
+        heatRemoved = heatRemoved.add(heat)
+        vent.damageTile(heat)
+    })
+    addHeat(heatRemoved.neg())
 }
