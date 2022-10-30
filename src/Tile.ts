@@ -334,13 +334,19 @@ export const getTileByComponent = (component: Component): BaseTile => {
             return new FuelRod(
                 'wind-turbine', 'Wind Turbine', 0,
                 new Decimal(0), new Decimal(30000), new Decimal(10),
-                1, new Decimal(1), new Decimal(1),
+                4, new Decimal(20), new Decimal(8),
             );
         case Component.Vent_1:
             return new HeatVent(
-                'vent-1', 'Standard turbine', 0,
+                'vent-1', 'Standard vent', 1,
                 new Decimal(0), new Decimal(100), new Decimal(10),
                 new Decimal(1), new Decimal(0), new Decimal(0),
+            );
+        case Component.Vent_2:
+            return new HeatVent(
+                'vent-2', 'Overclocked vent', 1,
+                new Decimal(0), new Decimal(1000), new Decimal(10),
+                new Decimal(24), new Decimal(36), new Decimal(0),
             );
     }
 };

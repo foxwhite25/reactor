@@ -13,7 +13,8 @@ export enum Tabs {
 export enum Component {
     Null,
     WindTurbine,
-    Vent_1
+    Vent_1,
+    Vent_2,
 }
 
 export const Globals: GlobalVariables = {

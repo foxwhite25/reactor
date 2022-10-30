@@ -91,8 +91,8 @@ export const tick = (): boolean => {
         }
     }
     if (!player.setting.simulation) {
-        player.heat = player.heat.add(Globals.stats.heat)
-        player.power = player.power.add(Globals.stats.power)
+        player.heat = Decimal.max(player.heat.add(Globals.stats.heat), 0)
+        player.power = Decimal.max(player.power.add(Globals.stats.power), 0)
     }
     return stopSimulation
 }
@@ -139,11 +139,11 @@ export const reload = async (reset = false): Promise<void> => {
 };
 
 export const addHeat = (heat: Decimal): void => {
-    Globals.stats.heat = Decimal.max(Globals.stats.heat.add(heat), 0)
+    Globals.stats.heat = Globals.stats.heat.add(heat)
 }
 
 export const addPower = (power: Decimal): void => {
-    Globals.stats.power = Decimal.max(Globals.stats.power.add(power), 0)
+    Globals.stats.power = Globals.stats.power.add(power)
 }
 
 export const blowUp = ():void => {
@@ -196,8 +196,14 @@ export const distributeHeat = (around: BaseTile[], heat: Decimal) :void => {
         return;
     }
 
+    const weights: Decimal[] = []
+
     list.map((tile) => {
-        tile.damageTile(heat.divide(list.length))
+        weights.push((tile.maxDamage.minus(tile.damage)).divide(tile.maxDamage))
+    })
+    const sum = weights.reduce((partialSum, a) => partialSum.add(a), new Decimal(0))
+    list.map((tile, i) => {
+        addHeat(tile.damageTile(heat.multiply(weights[i].divide(sum))))
     })
     return
 }
