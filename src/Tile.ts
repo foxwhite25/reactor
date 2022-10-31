@@ -350,13 +350,16 @@ export class HeatExchanger extends BaseTile {
 
 export class ReactorPlating extends BaseTile {
     maxHeatBonus: Decimal;
+    explosionImmunity: Decimal;
 
     constructor(
         id: string, title: string, row: number, damage: Decimal,
         maxDamage: Decimal, cost: Decimal, maxHeatBonus: Decimal,
+        explosionImmunity: Decimal,
     ) {
         super(id, title, row, damage, maxDamage, cost);
         this.maxHeatBonus = maxHeatBonus;
+        this.explosionImmunity = explosionImmunity
     }
 
     tickPre(): void {
@@ -370,6 +373,7 @@ export class ReactorPlating extends BaseTile {
     info(): string {
         let output = `Cost: <span style='color: var(--yellow-color)'>${format(this.cost)}$</span><br>`
         output += `Max Heat: +<span style='color: var(--red-color)'>${format(this.maxHeatBonus)}</span><br>`
+        output += `Explotion immunity: +<span style='color: var(--red-color)'>${this.explosionImmunity.multiply(100)}%</span><br>`
         return output
     }
 }
@@ -395,7 +399,7 @@ export class Capacitor extends BaseTile {
 
     info(): string {
         let output = `Cost: <span style='color: var(--yellow-color)'>${format(this.cost)}$</span><br>`
-        output += `Max Power: +<span style='color: var(--blue-color)'>${format(this.maxPowerBonus)}</span><br>`
+        output += `Max Power: +<span style='color: var(--cyan-color)'>${format(this.maxPowerBonus)}</span><br>`
         return output
     }
 }
@@ -472,17 +476,23 @@ export const getTileByComponent = (component: Component): BaseTile => {
             return new ReactorPlating(
                 'reactor-plating', 'Reactor Plating', 4,
                 new Decimal(0), new Decimal(0), new Decimal(10),
-                new Decimal(1000)
+                new Decimal(1000), new Decimal(0.1)
             )
         case Component.ContainmentPlating:
             return new ReactorPlating(
                 'reactor-plating-containment', 'Containment Reactor Plating', 4,
                 new Decimal(0), new Decimal(0), new Decimal(10),
-                new Decimal(500)
+                new Decimal(500), new Decimal(0.3)
             )
         case Component.HeatPlating:
             return new ReactorPlating(
                 'reactor-plating-heat', 'Heat Capacity Reactor Plating', 4,
+                new Decimal(0), new Decimal(0), new Decimal(10),
+                new Decimal(10000), new Decimal(0.05)
+            )
+        case Component.Capacitor:
+            return new Capacitor(
+                'capacitor', 'Basic Capacitor', 5,
                 new Decimal(0), new Decimal(0), new Decimal(10),
                 new Decimal(10000)
             )

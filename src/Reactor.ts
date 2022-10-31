@@ -44,6 +44,7 @@ export const tick = (): boolean => {
     Globals.stats.heat = new Decimal(0)
     Globals.vents.length = 0
     Globals.maxHeat = blankGlobals.maxHeat
+    Globals.maxPower = blankGlobals.maxPower
 
     let stopSimulation = true
 

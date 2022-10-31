@@ -24,7 +24,8 @@ export enum Component {
     IridiumNeutronReflector,
     ReactorPlating,
     ContainmentPlating,
-    HeatPlating
+    HeatPlating,
+    Capacitor
 }
 
 export const Globals: GlobalVariables = {
