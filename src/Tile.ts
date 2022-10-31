@@ -414,21 +414,27 @@ export const getTileByComponent = (component: Component): BaseTile => {
             )
         case Component.WindTurbine:
             return new FuelRod(
-                'wind-turbine', 'Quad Uranium FuelRod', 0,
+                'wind-turbine', 'Quad Uranium Fuel Rod', 0,
                 new Decimal(0), new Decimal(30000), new Decimal(10),
                 4, new Decimal(20), new Decimal(8),
             );
         case Component.Vent_1:
             return new HeatVent(
-                'vent-1', 'Standard vent', 1,
+                'vent-1', 'Standard Vent', 1,
                 new Decimal(0), new Decimal(100), new Decimal(10),
                 new Decimal(1), new Decimal(0), new Decimal(0),
             );
         case Component.Vent_2:
             return new HeatVent(
-                'vent-2', 'Overclocked vent', 1,
+                'vent-2', 'Overclocked Vent', 1,
                 new Decimal(0), new Decimal(1000), new Decimal(10),
                 new Decimal(24), new Decimal(36), new Decimal(0),
+            );
+        case Component.ComponentVent:
+            return new HeatVent(
+                'vent-component', 'Component Vent', 1,
+                new Decimal(0), new Decimal(1000), new Decimal(10),
+                new Decimal(0), new Decimal(0), new Decimal(4),
             );
         case Component.HeatExchanger_1:
             return new HeatExchanger(

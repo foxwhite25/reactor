@@ -43,7 +43,7 @@ export const generateEventHandlers = (): void => {
             Globals.shift = false;
         }
         if (Globals.shiftRemove && e.key == 'Shift') {
-            Globals.shift = false;
+            Globals.shiftRemove = false;
         }
     });
 

@@ -15,6 +15,7 @@ export enum Component {
     WindTurbine,
     Vent_1,
     Vent_2,
+    ComponentVent,
     HeatExchanger_1,
     HeatExchanger_2,
     HeatExchangerComponent,

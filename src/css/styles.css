@@ -448,6 +448,10 @@ button:active {
     background-image: url('Icons/overclocked_heat_vent.png');
 }
 
+.vent-component {
+    background-image: url('Icons/component_heat_vent.png');
+}
+
 .he-1 {
     background-image: url('Icons/heat_exchanger.png');
 }
