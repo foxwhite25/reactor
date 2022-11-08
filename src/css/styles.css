@@ -552,3 +552,93 @@ div.nuke.burn.b::before {
         inset 0 -80px 400px #c33;
     transition: width 3s, height 3s, top 3s, left 3s;
 }
+
+#upgrades {
+    align-items: start;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+#upgrades-table-container {
+    z-index: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-height: 350px;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 0;
+}
+
+.upgrades-table-row {
+    z-index: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+    font-size: 0;
+}
+
+.upgrade-container {
+    z-index: 1;
+    display: flex;
+    width: 50%;
+    padding: 12px;
+    font-size: medium;
+}
+
+.upgrade {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 7px;
+    background: var(--frontground-color);
+    border: var(--yellow-color) 1px solid;
+}
+
+.upgrade-image {
+    width: 40px;
+    height: 40px;
+    background-image: url('Icons/placeholder.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.upgrade-desc {
+    min-width: 400px;
+    margin: 0 auto;
+    color: var(--foreground-color);
+    text-align: left;
+}
+
+.upgrade-max {
+    width: 4em;
+    margin: 0 auto;
+    border: 2px var(--green-color) solid;
+}
+
+.upgrade-pos {
+    width: 3em;
+    margin: 0 auto;
+    border: 2px var(--green-color) solid;
+}
+
+.upgrade-min {
+    width: 4em;
+    margin: 0 auto;
+    border: 2px var(--red-color) solid;
+}
+
+.upgrade-neg {
+    width: 3em;
+    margin: 0 auto;
+    border: 2px var(--red-color) solid;
+}
+
+button[disabled] {
+    cursor: not-allowed;
+    background-color: var(--frontground-color);
+}
