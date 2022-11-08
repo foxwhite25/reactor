@@ -236,10 +236,15 @@ export const hideTooltip = (): void => {
 };
 
 export const processComponentQue = (): void => {
-    for (const componentSet of Globals.componentQue) {
+    let lastX = 0
+    let lastY = 0
+    Globals.componentQue.map((componentSet) => {
         const c = componentSet.coordinate;
         const component = componentSet.component;
         player.tiles[c.row][c.col] = getTileByComponent(component);
-    }
+        lastX = c.row
+        lastY = c.col
+    })
+    tileTooltip(lastX, lastY)
     Globals.componentQue = [];
 };

@@ -8,11 +8,10 @@ export const buySelectedComponent = (row: number, col: number): void => {
     buyComponent(row, col, Globals.selectorComponent);
 };
 
-export const buyComponent = (row: number, col: number, component: Component, immediate = true): void => {
+export const buyComponent = (row: number, col: number, component: Component, immediate = false): void => {
     if (component != Component.Null && player.tiles[row][col].id != '') {
         return;
     }
-
     if (!immediate) {
         for (const buildingQueElement of Globals.componentQue) {
             if (buildingQueElement.coordinate.col == row && buildingQueElement.coordinate.col == row) {
@@ -20,7 +19,6 @@ export const buyComponent = (row: number, col: number, component: Component, imm
             }
         }
     }
-
     if (component != Component.Null && player.money.lessThan(Globals.emptyTiles[component].cost)) {
         showTooltip('', `<span style='color: var(--red-color)'>You don't have enough money for ${Globals.emptyTiles[component].title}!</span>`);
         return;

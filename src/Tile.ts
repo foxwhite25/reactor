@@ -128,6 +128,9 @@ export class FuelRod extends BaseTile {
         const around: BaseTile[] = [];
 
         for (let i = 0; i < 4; i++) {
+            if (row + Globals.offsetRow[i] < 0 || col + Globals.offsetCol[i] < 0) {
+                continue
+            }
             const t = player.tiles[row + Globals.offsetRow[i]][col + Globals.offsetCol[i]];
             if (t.id == '') {
                 continue;
@@ -152,7 +155,7 @@ export class FuelRod extends BaseTile {
 
         if (col != undefined && row != undefined) {
             for (let i = 0; i < 4; i++) {
-                if (row + Globals.offsetRow[i] < 0 && col + Globals.offsetCol[i] < 0) {
+                if (row + Globals.offsetRow[i] < 0 || col + Globals.offsetCol[i] < 0) {
                     continue
                 }
                 const t = player.tiles[row + Globals.offsetRow[i]][col + Globals.offsetCol[i]];
@@ -189,6 +192,9 @@ export class NeutronReflector extends BaseTile {
         }
 
         for (let i = 0; i < 4; i++) {
+            if (row + Globals.offsetRow[i] < 0 || col + Globals.offsetCol[i] < 0) {
+                continue
+            }
             const t = player.tiles[row + Globals.offsetRow[i]][col + Globals.offsetCol[i]];
             if (t == null) {
                 continue;
@@ -236,7 +242,9 @@ export class HeatVent extends BaseTile {
 
         if (this.componentCooling.greaterThan(0)) {
             for (let i = 0; i < 4; i++) {
-                const t = player.tiles[row + Globals.offsetRow[i]][col + Globals.offsetCol[i]];
+                if (row + Globals.offsetRow[i] < 0 || col + Globals.offsetCol[i] < 0) {
+                    continue
+                }                const t = player.tiles[row + Globals.offsetRow[i]][col + Globals.offsetCol[i]];
                 if (t == null) {
                     continue;
                 }
@@ -307,6 +315,9 @@ export class HeatExchanger extends BaseTile {
 
         if (this.heatTransferToAdjacent.greaterThan(0)) {
             for (let i = 0; i < 4; i++) {
+                if (row + Globals.offsetRow[i] < 0 || col + Globals.offsetCol[i] < 0) {
+                    continue
+                }
                 const t = player.tiles[row + Globals.offsetRow[i]][col + Globals.offsetCol[i]];
 
                 if (t.isHeatAcceptor()) {
