@@ -610,6 +610,7 @@ div.nuke.burn.b::before {
 .upgrade-desc {
     min-width: 400px;
     margin: 0 auto;
+    font-weight: bold;
     color: var(--foreground-color);
     text-align: left;
 }

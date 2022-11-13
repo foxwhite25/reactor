@@ -20,7 +20,10 @@ export const buyComponent = (row: number, col: number, component: Component, imm
         }
     }
     if (component != Component.Null && player.money.lessThan(Globals.emptyTiles[component].cost)) {
-        showTooltip('', `<span style='color: var(--red-color)'>You don't have enough money for ${Globals.emptyTiles[component].title}!</span>`);
+        Globals.tooltipFunction = () => {
+            return {title: '', content: `<span style='color: var(--red-color)'>You don't have enough money for ${Globals.emptyTiles[component].title}!</span>`}
+        }
+        showTooltip();
         return;
     }
 

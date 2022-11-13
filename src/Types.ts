@@ -1,6 +1,7 @@
 import Decimal from 'break_infinity.js';
 import { Component, Tabs } from '@/Variables';
 import { BaseTile, HeatVent } from '@/Tile';
+import { BaseUpgrade } from '@/Upgrades';
 
 export interface Player {
     firstPlayed: string;
@@ -12,6 +13,8 @@ export interface Player {
     particle: Decimal;
 
     tiles: BaseTile[][];
+
+    upgrades: BaseUpgrade[];
 
     setting: {
         theme: string;
@@ -39,7 +42,7 @@ export interface GlobalVariables {
     shift: boolean
     shiftRemove: boolean
 
-    tooltipIntervalId: number | null
+    tooltipFunction: () => {title: string, content: string}
     currentTab: Tabs;
 }
 

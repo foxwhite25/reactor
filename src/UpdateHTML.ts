@@ -6,71 +6,10 @@ import { visualUpdateBuildings } from '@/UpdateTabs';
 import { buyComponent, buySelectedComponent } from '@/Components';
 import { toggleComponent } from '@/Toggles';
 import { getTileByComponent } from '@/Tile';
-import { clearInterval, setInterval } from './Timers';
 import { alignTooltip } from '@/EventListener';
+import { BaseUpgrade } from '@/Upgrades';
 
-export const setupPage = (): void => {
-    const table = document.getElementById('map-table') as HTMLTableElement | null;
-    if (!table) {
-        throw new TypeError('Element with id "map-table" was not found on page?');
-    }
-    table.style.width = `${Globals.mapWidth * 32}px`;
-    table.style.height = `${Globals.mapHeight * 32}px`;
-
-    for (let i = 0; i < Globals.mapHeight; i++) {
-        const row = table.insertRow();
-        row.id = `map-row${i}`;
-        for (let j = 0; j < Globals.mapWidth; j++) {
-            const cell = row.insertCell();
-            cell.id = `map-cell-${i}-${j}`;
-            const tile = player.tiles[i][j];
-            cell.className = `map-table-cell ${tile.id}`;
-            if ((i + j) % 2 == 0) {
-                cell.style.backgroundColor = 'var(--frontground-color)';
-            } else {
-                cell.style.backgroundColor = 'var(--blue-color)';
-            }
-            cell.addEventListener('click', (e) => {
-                buySelectedComponent(i, j);
-                alignTooltip(e)
-                if (e.shiftKey) {
-                    Globals.shift = true;
-                }
-            });
-            cell.addEventListener('mouseover', (e) => {
-                tileTooltip(i, j);
-                alignTooltip(e)
-                if (Globals.shift) {
-                    buySelectedComponent(i, j);
-                }
-                if (Globals.shiftRemove) {
-                    buyComponent(i, j, Component.Null);
-                }
-            });
-            cell.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                buyComponent(i, j, Component.Null);
-                if (e.shiftKey) {
-                    Globals.shiftRemove = true;
-                }
-                return false;
-            });
-            cell.addEventListener('mouseout', () => {
-                hideTooltip();
-            });
-
-            const barContainer = document.createElement('div')
-            barContainer.className = 'durability-bar-container'
-
-            const bar = document.createElement('div')
-            bar.id = `map-bar-${i}-${j}`;
-            bar.className = 'durability-bar'
-            barContainer.append(bar)
-
-            cell.append(barContainer)
-        }
-    }
-
+function setupBuildings() {
     const componentBox = document.getElementById('buildings-component-table-container');
     if (componentBox == null) {
         throw new TypeError('Element with id "buildings-component-table-container" was not found on page?');
@@ -79,7 +18,7 @@ export const setupPage = (): void => {
     Globals.emptyTiles.forEach((tile, index) => {
         const className = tile.id;
         if (tile.id == '') {
-            return
+            return;
         }
         if (boxRows.length - 1 < tile.row) {
             for (let i = 0; i < (tile.row + 1) - boxRows.length; i++) {
@@ -105,6 +44,139 @@ export const setupPage = (): void => {
             hideTooltip();
         });
     });
+}
+
+function setupCells() {
+    const table = document.getElementById('map-table') as HTMLTableElement | null;
+    if (!table) {
+        throw new TypeError('Element with id "map-table" was not found on page?');
+    }
+    table.style.width = `${Globals.mapWidth * 32}px`;
+    table.style.height = `${Globals.mapHeight * 32}px`;
+
+    for (let i = 0; i < Globals.mapHeight; i++) {
+        const row = table.insertRow();
+        row.id = `map-row${i}`;
+        for (let j = 0; j < Globals.mapWidth; j++) {
+            const cell = row.insertCell();
+            cell.id = `map-cell-${i}-${j}`;
+            const tile = player.tiles[i][j];
+            cell.className = `map-table-cell ${tile.id}`;
+            if ((i + j) % 2 == 0) {
+                cell.style.backgroundColor = 'var(--frontground-color)';
+            } else {
+                cell.style.backgroundColor = 'var(--blue-color)';
+            }
+            cell.addEventListener('click', (e) => {
+                buySelectedComponent(i, j);
+                alignTooltip(e);
+                if (e.shiftKey) {
+                    Globals.shift = true;
+                }
+            });
+            cell.addEventListener('mouseover', (e) => {
+                tileTooltip(i, j);
+                alignTooltip(e);
+                if (Globals.shift) {
+                    buySelectedComponent(i, j);
+                }
+                if (Globals.shiftRemove) {
+                    buyComponent(i, j, Component.Null);
+                }
+            });
+            cell.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                buyComponent(i, j, Component.Null);
+                if (e.shiftKey) {
+                    Globals.shiftRemove = true;
+                }
+                return false;
+            });
+            cell.addEventListener('mouseout', () => {
+                hideTooltip();
+            });
+
+            const barContainer = document.createElement('div');
+            barContainer.className = 'durability-bar-container';
+
+            const bar = document.createElement('div');
+            bar.id = `map-bar-${i}-${j}`;
+            bar.className = 'durability-bar';
+            barContainer.append(bar);
+
+            cell.append(barContainer);
+        }
+    }
+}
+
+function setupUpgrades() {
+    const componentBox = DOMCacheGetOrSet('upgrades-table-container');
+    if (componentBox == null) {
+        throw new TypeError('Element with id "upgrades-table-container" was not found on page?');
+    }
+    let div: HTMLDivElement;
+    player.upgrades.forEach((upgrade, index) => {
+        if (index % 2 == 0) {
+            div = document.createElement('div')
+            div.className = 'upgrades-table-row'
+            componentBox.append(div)
+        }
+        const container = document.createElement('div')
+        container.className = 'upgrade-container'
+        container.id = upgrade.id
+        div.append(container)
+        container.addEventListener('mouseover', () => {
+            upgradeTooltip(upgrade);
+        });
+        container.addEventListener('mouseout', () => {
+            hideTooltip();
+        });
+
+        const u = document.createElement('div')
+        u.className = 'upgrade'
+        container.append(u)
+
+        const image = document.createElement('div')
+        image.className = 'upgrade-image'
+        image.id = `upgrade-image-${upgrade.id}`
+        u.append(image)
+
+        const desc = document.createElement('span')
+        desc.className = 'upgrade-desc'
+        desc.innerText = upgrade.title + ' ' + format(upgrade.count)
+        desc.id = `upgrade-desc-${upgrade.id}`
+        u.append(desc)
+
+        const bMax = document.createElement('button')
+        bMax.className = 'upgrade-max'
+        u.append(bMax)
+        bMax.id = `upgrade-max-${upgrade.id}`
+        bMax.innerText = '+MAX'
+
+        const bPos = document.createElement('button')
+        bPos.className = 'upgrade-pos'
+        u.append(bPos)
+        bPos.id = `upgrade-pos-${upgrade.id}`
+        bPos.innerText = '+1'
+
+        const bNeg = document.createElement('button')
+        bNeg.className = 'upgrade-neg'
+        u.append(bNeg)
+        bNeg.id = `upgrade-neg-${upgrade.id}`
+        bNeg.innerText = '-1'
+
+        const bMin = document.createElement('button')
+        bMin.className = 'upgrade-min'
+        u.append(bMin)
+        bMin.id = `upgrade-min-${upgrade.id}`
+        bMin.innerText = '-MAX'
+    })
+}
+
+export const setupPage = (): void => {
+    setupCells();
+    setupBuildings();
+    setupUpgrades();
 };
 
 export const hideStuff = (): void => {
@@ -196,6 +268,9 @@ export const htmlInserts = (): void => {
             }
         }
     }
+    const tt = Globals.tooltipFunction()
+    DOMCacheGetOrSet('description-title').innerHTML = tt.title;
+    DOMCacheGetOrSet('description-content').innerHTML = tt.content;
 
     DOMCacheGetOrSet('power-bar').style.width = `${player.power.multiply(100).divide(Globals.maxPower)}%`;
     DOMCacheGetOrSet('heat-bar').style.width = `${player.heat.multiply(100).divide(Globals.maxHeat)}%`;
@@ -207,31 +282,38 @@ export const tileTooltip = (row: number, col: number): void => {
     if (tile.id == '') {
         return
     }
-    showTooltip(tile.info(row, col), tile.title)
-    Globals.tooltipIntervalId = setInterval(()=>{
+    Globals.tooltipFunction = () => {
         const tile = player.tiles[row][col];
-        DOMCacheGetOrSet('description-content').innerHTML = tile.info(row, col)
-    }, 10)
+        return {title: tile.title, content: tile.info(row, col)}
+    }
+    showTooltip()
 };
 
 export const componentTooltip = (component: Component): void => {
     const tile = Globals.emptyTiles[component]
     if (tile.id != '') {
-        showTooltip(tile.info(undefined, undefined), tile.title);
+        Globals.tooltipFunction = () => {
+            return {title: tile.title, content: tile.info(undefined, undefined)}
+        }
+        showTooltip();
     }
 };
 
-export const showTooltip = (description: string, title: string): void => {
+export const upgradeTooltip = (upgrade: BaseUpgrade): void => {
+    Globals.tooltipFunction = () => {
+        return {title: upgrade.title, content: upgrade.info()}
+    }
+    showTooltip()
+}
+
+export const showTooltip = (): void => {
+    const tt = Globals.tooltipFunction()
+    DOMCacheGetOrSet('description-title').innerHTML = tt.title;
+    DOMCacheGetOrSet('description-content').innerHTML = tt.content;
     DOMCacheGetOrSet('tooltip').style.display = 'block';
-    DOMCacheGetOrSet('description-title').innerHTML = title;
-    DOMCacheGetOrSet('description-content').innerHTML = description;
 };
 
 export const hideTooltip = (): void => {
-    if (Globals.tooltipIntervalId != null) {
-        clearInterval(Globals.tooltipIntervalId)
-        Globals.tooltipIntervalId = null
-    }
     DOMCacheGetOrSet('tooltip').style.display = 'none';
 };
 

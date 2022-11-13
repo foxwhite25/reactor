@@ -9,6 +9,7 @@ import { BaseTile, FuelRod } from '@/Tile';
 import { buyComponent } from '@/Components';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { format } from '@/Utils';
+import { getUpgradeByEnum, UpgradeEnum } from '@/Upgrades';
 
 export const player: Player = {
     firstPlayed: new Date().toISOString(),
@@ -18,6 +19,12 @@ export const player: Player = {
     power: new Decimal(0),
     particle: new Decimal(0),
     tiles: [],
+    upgrades: Object.values(UpgradeEnum).filter((c) => typeof c != 'string').map((c) => {
+        if (typeof c == 'string') {
+            return getUpgradeByEnum(UpgradeEnum.Null)
+        }
+        return getUpgradeByEnum(c)
+    }),
     setting: {
         theme: 'dracula',
         paused: false,

@@ -53,7 +53,7 @@ export const Globals: GlobalVariables = {
     shift: false,
     shiftRemove: false,
 
-    tooltipIntervalId: null,
+    tooltipFunction: () => {return {title: '', content: ''}},
     currentTab: Tabs.Buildings,
 };
 
