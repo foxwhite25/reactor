@@ -31,7 +31,7 @@ export interface GlobalVariables {
 
     maxPower: Decimal
     maxHeat: Decimal
-    selectorComponent: Component
+    selectedComponent: Component
     componentQue: { coordinate: Coordinate, component: Component }[]
     vents: HeatVent[]
     stats: {
@@ -40,6 +40,8 @@ export interface GlobalVariables {
     }
     emptyTiles: BaseTile[]
     shift: boolean
+    ctrl: boolean
+    shiftAdd: boolean
     shiftRemove: boolean
 
     tooltipFunction: () => {title: string, content: string}

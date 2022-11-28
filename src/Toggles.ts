@@ -15,14 +15,14 @@ export const toggleTabs = (tabs: Tabs): void => {
 };
 
 export const toggleComponent = (component: Component): void => {
-    if (component == Globals.selectorComponent) {
-        Globals.selectorComponent = Component.Null;
+    if (component == Globals.selectedComponent) {
+        Globals.selectedComponent = Component.Null;
         DOMCacheGetOrSet(Globals.emptyTiles[component].id).style.borderColor = 'var(--blue-color)';
     } else {
-        if (Globals.selectorComponent != Component.Null) {
-            DOMCacheGetOrSet(Globals.emptyTiles[Globals.selectorComponent].id).style.borderColor = 'var(--blue-color)';
+        if (Globals.selectedComponent != Component.Null) {
+            DOMCacheGetOrSet(Globals.emptyTiles[Globals.selectedComponent].id).style.borderColor = 'var(--blue-color)';
         }
-        Globals.selectorComponent = component;
+        Globals.selectedComponent = component;
         DOMCacheGetOrSet(Globals.emptyTiles[component].id).style.borderColor = 'var(--green-color)';
     }
 

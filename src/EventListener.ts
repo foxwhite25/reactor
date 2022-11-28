@@ -37,13 +37,34 @@ export const alignTooltip = (e: MouseEvent): void =>  {
 
 export const generateEventHandlers = (): void => {
     document.addEventListener('mousemove', (e) => {alignTooltip(e)});
-
-    DOMCacheGetOrSet('body').addEventListener('keyup', (e) => {
-        if (Globals.shift && e.key == 'Shift') {
-            Globals.shift = false;
+    DOMCacheGetOrSet('body').addEventListener('keydown', (e) => {
+        switch (e.key) {
+            case 'Shift': {
+                Globals.shift = true
+                return
+            }
+            case 'Control': {
+                Globals.ctrl = true
+                return;
+            }
         }
-        if (Globals.shiftRemove && e.key == 'Shift') {
-            Globals.shiftRemove = false;
+    });
+    DOMCacheGetOrSet('body').addEventListener('keyup', (e) => {
+        switch (e.key) {
+            case 'Shift': {
+                Globals.shift = false
+                if (Globals.shiftAdd) {
+                    Globals.shiftAdd = false;
+                }
+                if (Globals.shiftRemove) {
+                    Globals.shiftRemove = false;
+                }
+                return
+            }
+            case 'Control': {
+                Globals.ctrl = false
+                return;
+            }
         }
     });
 

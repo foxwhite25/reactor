@@ -1,13 +1,13 @@
 import { player } from '@/Reactor';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
-import { format } from '@/Utils';
+import { format, getKeyMultiplier } from '@/Utils';
 import { Component, Globals, Tabs } from '@/Variables';
-import { visualUpdateBuildings } from '@/UpdateTabs';
+import { visualUpdateBuildings, visualUpdateUpgrades } from '@/UpdateTabs';
 import { buyComponent, buySelectedComponent } from '@/Components';
 import { toggleComponent } from '@/Toggles';
 import { getTileByComponent } from '@/Tile';
 import { alignTooltip } from '@/EventListener';
-import { BaseUpgrade } from '@/Upgrades';
+import { BaseUpgrade, buyUpgrade, refundUpgrade } from '@/Upgrades';
 
 function setupBuildings() {
     const componentBox = document.getElementById('buildings-component-table-container');
@@ -71,13 +71,13 @@ function setupCells() {
                 buySelectedComponent(i, j);
                 alignTooltip(e);
                 if (e.shiftKey) {
-                    Globals.shift = true;
+                    Globals.shiftAdd = true;
                 }
             });
             cell.addEventListener('mouseover', (e) => {
                 tileTooltip(i, j);
                 alignTooltip(e);
-                if (Globals.shift) {
+                if (Globals.shiftAdd) {
                     buySelectedComponent(i, j);
                 }
                 if (Globals.shiftRemove) {
@@ -125,12 +125,6 @@ function setupUpgrades() {
         container.className = 'upgrade-container'
         container.id = upgrade.id
         div.append(container)
-        container.addEventListener('mouseover', () => {
-            upgradeTooltip(upgrade);
-        });
-        container.addEventListener('mouseout', () => {
-            hideTooltip();
-        });
 
         const u = document.createElement('div')
         u.className = 'upgrade'
@@ -152,24 +146,60 @@ function setupUpgrades() {
         u.append(bMax)
         bMax.id = `upgrade-max-${upgrade.id}`
         bMax.innerText = '+MAX'
+        bMax.addEventListener('click', ()=>{
+            buyUpgrade(upgrade, upgrade.getMaxNumber(player.money))
+        })
+        bMax.addEventListener('mouseover', () => {
+            upgradeTooltip(upgrade, 'posMax');
+        });
+        bMax.addEventListener('mouseout', () => {
+            hideTooltip();
+        });
 
         const bPos = document.createElement('button')
         bPos.className = 'upgrade-pos'
         u.append(bPos)
         bPos.id = `upgrade-pos-${upgrade.id}`
         bPos.innerText = '+1'
+        bPos.addEventListener('click', ()=>{
+            buyUpgrade(upgrade, getKeyMultiplier())
+        })
+        bPos.addEventListener('mouseover', () => {
+            upgradeTooltip(upgrade, 'pos');
+        });
+        bPos.addEventListener('mouseout', () => {
+            hideTooltip();
+        });
 
         const bNeg = document.createElement('button')
         bNeg.className = 'upgrade-neg'
         u.append(bNeg)
         bNeg.id = `upgrade-neg-${upgrade.id}`
         bNeg.innerText = '-1'
+        bNeg.addEventListener('click', ()=>{
+            refundUpgrade(upgrade, getKeyMultiplier())
+        })
+        bNeg.addEventListener('mouseover', () => {
+            upgradeTooltip(upgrade, 'neg');
+        });
+        bNeg.addEventListener('mouseout', () => {
+            hideTooltip();
+        });
 
         const bMin = document.createElement('button')
         bMin.className = 'upgrade-min'
         u.append(bMin)
         bMin.id = `upgrade-min-${upgrade.id}`
         bMin.innerText = '-MAX'
+        bMin.addEventListener('click', ()=>{
+            refundUpgrade(upgrade, upgrade.count)
+        })
+        bMin.addEventListener('mouseover', () => {
+            upgradeTooltip(upgrade, 'negMax');
+        });
+        bMin.addEventListener('mouseout', () => {
+            hideTooltip();
+        });
     })
 }
 
@@ -242,7 +272,7 @@ export const hideStuff = (): void => {
 
 const visualTab: Record<typeof Globals.currentTab, () => void> = {
     0: visualUpdateBuildings,
-    1: visualUpdateBuildings,
+    1: visualUpdateUpgrades,
     2: visualUpdateBuildings,
     3: visualUpdateBuildings,
     4: visualUpdateBuildings,
@@ -299,9 +329,37 @@ export const componentTooltip = (component: Component): void => {
     }
 };
 
-export const upgradeTooltip = (upgrade: BaseUpgrade): void => {
+export const upgradeTooltip = (upgrade: BaseUpgrade, t: 'posMax' | 'pos' | 'neg' | 'negMax'): void => {
     Globals.tooltipFunction = () => {
-        return {title: upgrade.title, content: upgrade.info()}
+        const replaceStr = (t: 'posMax' | 'pos' | 'neg' | 'negMax'): string => {
+            switch (t) {
+                case 'posMax': {
+                    const numberToBuy = upgrade.getMaxNumber(player.money);
+                    if (numberToBuy == 0) {
+                        return `Cost: <span style='color: var(--red-color)'>${format(upgrade.getSingleCost())}$</span>`;
+                    }
+                    return `Cost: <span style='color: var(--green-color)'>${format(upgrade.getBulkCost(numberToBuy))}$</span> (+${format(numberToBuy)})`;
+                }
+                case 'pos': {
+                    const cost = upgrade.getBulkCost(getKeyMultiplier());
+                    if (player.money.lessThan(cost)) {
+                        return `Cost: <span style='color: var(--red-color)'>${format(upgrade.getBulkCost(getKeyMultiplier()))}$</span>`;
+                    }
+                    return `Cost: <span style='color: var(--green-color)'>${format(upgrade.getBulkCost(getKeyMultiplier()))}$</span>`;
+                }
+                case 'neg': {
+                    const refundCount = Math.min(getKeyMultiplier(), upgrade.count)
+                    const refundAmount = upgrade.getBulkCostWithCount(refundCount, upgrade.count - refundCount)
+                    return `Refund: <span style='color: var(--green-color)'>${format(refundAmount)}$</span> (-${refundCount})`;
+                }
+                case 'negMax': {
+                    const refundCount = upgrade.count
+                    const refundAmount = upgrade.getBulkCostWithCount(refundCount, upgrade.count - refundCount)
+                    return `Refund: <span style='color: var(--green-color)'>${format(refundAmount)}$</span> (-${refundCount})`;
+                }
+            }
+        }
+        return {title: upgrade.title, content: upgrade.info().replace('%cost', replaceStr(t))}
     }
     showTooltip()
 }
@@ -310,11 +368,14 @@ export const showTooltip = (): void => {
     const tt = Globals.tooltipFunction()
     DOMCacheGetOrSet('description-title').innerHTML = tt.title;
     DOMCacheGetOrSet('description-content').innerHTML = tt.content;
-    DOMCacheGetOrSet('tooltip').style.display = 'block';
+    DOMCacheGetOrSet('tooltip').style.visibility = 'visible';
 };
 
 export const hideTooltip = (): void => {
-    DOMCacheGetOrSet('tooltip').style.display = 'none';
+    Globals.tooltipFunction = () => {
+        return {title: '', content: ''}
+    }
+    DOMCacheGetOrSet('tooltip').style.visibility = 'hidden';
 };
 
 export const processComponentQue = (): void => {

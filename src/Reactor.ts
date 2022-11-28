@@ -8,7 +8,6 @@ import { toggleTabs } from '@/Toggles';
 import { BaseTile, FuelRod } from '@/Tile';
 import { buyComponent } from '@/Components';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
-import { format } from '@/Utils';
 import { getUpgradeByEnum, UpgradeEnum } from '@/Upgrades';
 
 export const player: Player = {
@@ -228,7 +227,6 @@ const distributeVent = () :void => {
 
     vents.map((vent)=>{
         const heat = player.heat.divide(vents.length).min(vent.reactorCooling)
-        console.log(format(player.heat), vents.length, format(heat))
         heatRemoved = heatRemoved.add(heat)
         vent.damageTile(heat)
     })

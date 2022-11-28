@@ -1,4 +1,7 @@
 import Decimal from 'break_infinity.js';
+import { player } from '@/Reactor';
+import { Globals } from '@/Variables';
+import { showTooltip } from '@/UpdateHTML';
 import { format } from '@/Utils';
 
 export enum UpgradeEnum {
@@ -39,6 +42,17 @@ export abstract class BaseUpgrade {
         return this.getSingleCost().multiply(this.costBase.pow(numberToBuy).minus(1)).divide(this.costBase.minus(1))
     }
 
+    getSingleCostWithCount(count: number): Decimal {
+        return this.cost.multiply(this.costBase.pow(count + 1))
+    }
+
+    getBulkCostWithCount(numberToBuy: number, count: number) : Decimal {
+        if (numberToBuy == 1) {
+            return this.getSingleCostWithCount(count)
+        }
+        return this.getSingleCostWithCount(count).multiply(this.costBase.pow(numberToBuy).minus(1)).divide(this.costBase.minus(1))
+    }
+
     getMaxNumber(money: Decimal) : number {
         const singleCost = this.getSingleCost()
         if (money.lessThan(singleCost)) {
@@ -66,7 +80,9 @@ class EfficientUranium extends BaseUpgrade{
     }
 
     info(): string {
-        return `Cost: <span style='color: var(--yellow-color)'>${format(this.getSingleCost())}$</span><br>Uranium Fuel Rod Output: <span style='color: var(--green-color)'>50%</span>`
+        return `%cost
+                Uranium Fuel Rod Output: <span style='color: var(--green-color)'>50%</span><br>
+                Current Bonus: <span style='color: var(--green-color)'>${format(new Decimal(1.5).pow(this.count).minus(1).multiply(100))}%</span>`
     }
 }
 
@@ -77,4 +93,24 @@ export const getUpgradeByEnum = (e: UpgradeEnum): BaseUpgrade => {
         case UpgradeEnum.EfficientUranium:
             return new EfficientUranium('eu','Efficient Uranium',new Decimal(10), new Decimal(20), 0)
     }
+}
+
+export const buyUpgrade = (upgrade: BaseUpgrade, amount: number): void => {
+    const cost = upgrade.getBulkCost(amount)
+    if (player.money.lessThan(cost) || amount == 0) {
+        Globals.tooltipFunction = () => {
+            return {title: '', content: `<span style='color: var(--red-color)'>You don't have enough money for ${upgrade.title}!</span>`}
+        }
+        showTooltip();
+    } else {
+        player.money = player.money.minus(cost);
+        upgrade.count += amount;
+    }
+}
+
+export const refundUpgrade = (upgrade: BaseUpgrade, count: number): void => {
+    count = Math.min(count, upgrade.count)
+    const refundAmount = upgrade.getBulkCostWithCount(count, upgrade.count - count)
+    player.money = player.money.add(refundAmount)
+    upgrade.count -= count
 }

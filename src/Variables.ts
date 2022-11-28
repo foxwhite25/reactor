@@ -37,7 +37,7 @@ export const Globals: GlobalVariables = {
 
     maxPower: new Decimal(50000),
     maxHeat: new Decimal(50000),
-    selectorComponent: Component.Null,
+    selectedComponent: Component.Null,
     componentQue: [],
     vents: [],
     stats: {
@@ -51,6 +51,8 @@ export const Globals: GlobalVariables = {
         return getTileByComponent(c)
     }),
     shift: false,
+    ctrl: false,
+    shiftAdd: false,
     shiftRemove: false,
 
     tooltipFunction: () => {return {title: '', content: ''}},

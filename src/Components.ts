@@ -3,9 +3,10 @@ import { player } from '@/Reactor';
 import { hideTooltip, showTooltip, tileTooltip } from '@/UpdateHTML';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
 import { getTileByComponent } from '@/Tile';
+import Decimal from 'break_infinity.js';
 
 export const buySelectedComponent = (row: number, col: number): void => {
-    buyComponent(row, col, Globals.selectorComponent);
+    buyComponent(row, col, Globals.selectedComponent);
 };
 
 export const buyComponent = (row: number, col: number, component: Component, immediate = false): void => {
@@ -27,6 +28,7 @@ export const buyComponent = (row: number, col: number, component: Component, imm
         return;
     }
 
+    const original = player.tiles[row][col]
     if (!immediate) {
         Globals.componentQue.push({
             component: component,
@@ -43,6 +45,11 @@ export const buyComponent = (row: number, col: number, component: Component, imm
         tileTooltip(row, col);
     } else {
         hideTooltip()
+        if (original.isDamageableItem()) {
+            player.money = player.money.add(original.cost.multiply(new Decimal(1).minus(original.getRelativeDamage())).divide(2))
+        } else {
+            player.money = player.money.add(original.cost)
+        }
     }
 
     let classname = 'map-table-cell ';
@@ -62,4 +69,3 @@ export const buyComponent = (row: number, col: number, component: Component, imm
     player.money = player.money.minus(Globals.emptyTiles[component].cost);
     DOMCacheGetOrSet(`map-cell-${row}-${col}`).className = classname;
 };
-

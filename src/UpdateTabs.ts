@@ -1,7 +1,7 @@
 import { Globals, Tabs } from '@/Variables';
 import { player } from '@/Reactor';
 import { DOMCacheGetOrSet } from '@/Cache/DOM';
-import { format } from '@/Utils';
+import { format, getKeyMultiplier } from '@/Utils';
 
 export const visualUpdateBuildings = (): void => {
     if (Globals.currentTab != Tabs.Buildings) {
@@ -19,5 +19,16 @@ export const visualUpdateBuildings = (): void => {
                 bar.style.width = `${format((tile.maxDamage.minus(tile.damage)).divide(tile.maxDamage).multiply(100))}%`;
             }
         })
+    })
+};
+
+export const visualUpdateUpgrades = (): void => {
+    if (Globals.currentTab != Tabs.Upgrades) {
+        return;
+    }
+    player.upgrades.map((upgrade) => {
+        DOMCacheGetOrSet(`upgrade-desc-${upgrade.id}`).innerText = upgrade.title + ' ' + format(upgrade.count)
+        DOMCacheGetOrSet(`upgrade-pos-${upgrade.id}`).innerText = `+${getKeyMultiplier()}`
+        DOMCacheGetOrSet(`upgrade-neg-${upgrade.id}`).innerText = `-${getKeyMultiplier()}`
     })
 };

@@ -270,11 +270,11 @@ a:visited {
 #tooltip {
     position: absolute;
     z-index: 1000;
-    display: none;
     width: 250px;
     height: 100px;
     padding: 10px;
     margin-left: 28px;
+    visibility: hidden;
     background-color: var(--background-color);
     border: 1px solid;
 }
@@ -616,25 +616,25 @@ div.nuke.burn.b::before {
 }
 
 .upgrade-max {
-    width: 4em;
+    width: 5em;
     margin: 0 auto;
     border: 2px var(--green-color) solid;
 }
 
 .upgrade-pos {
-    width: 3em;
+    width: 4em;
     margin: 0 auto;
     border: 2px var(--green-color) solid;
 }
 
 .upgrade-min {
-    width: 4em;
+    width: 5em;
     margin: 0 auto;
     border: 2px var(--red-color) solid;
 }
 
 .upgrade-neg {
-    width: 3em;
+    width: 4em;
     margin: 0 auto;
     border: 2px var(--red-color) solid;
 }

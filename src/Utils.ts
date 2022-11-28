@@ -1,4 +1,5 @@
 import Decimal from 'break_infinity.js';
+import { Globals } from '@/Variables';
 
 export const isDecimal = (o: unknown): o is Decimal =>
     o instanceof Decimal ||
@@ -48,6 +49,17 @@ const padEvery = (str: string, places = 3) => {
     (newStr as unknown as number) | 0;
     return newStr;
 };
+
+export const getKeyMultiplier = ():number => {
+    let count = 1
+    if (Globals.ctrl) {
+        count *= 10
+    }
+    if (Globals.shift) {
+        count *= 100
+    }
+    return count
+}
 
 export const format = (
     input:

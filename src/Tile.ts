@@ -2,6 +2,7 @@ import { Component, Globals } from '@/Variables';
 import Decimal from 'break_infinity.js';
 import { addHeat, addPower, distributeHeat, player } from '@/Reactor';
 import { format } from '@/Utils';
+import { UpgradeEnum } from '@/Upgrades';
 
 export interface TileSave {
     component: Component;
@@ -141,8 +142,8 @@ export class FuelRod extends BaseTile {
                 pulse = pulse.add(t.reflect);
             }
         }
-
-        addPower(pulse.multiply(this.energyMultiplier()));
+        const upgradeMultiplier = new Decimal(1.5).pow(player.upgrades[UpgradeEnum.EfficientUranium].count)
+        addPower(pulse.multiply(this.energyMultiplier()).multiply(upgradeMultiplier));
         distributeHeat(around, this.heatMultiplier().multiply(pulse).multiply(pulse.plus(1)));
         this.damageTile(new Decimal(1));
     }
@@ -165,7 +166,8 @@ export class FuelRod extends BaseTile {
             }
         }
 
-        output += `Energy Output: <span style='color: var(--cyan-color)'>${format(pulse.multiply(this.energyMultiplier()))}</span><br>`
+        const upgradeMultiplier = new Decimal(1.5).pow(player.upgrades[UpgradeEnum.EfficientUranium].count)
+        output += `Energy Output: <span style='color: var(--cyan-color)'>${format(pulse.multiply(this.energyMultiplier()).multiply(upgradeMultiplier))}</span><br>`
         output += `Heat Produced: <span style='color: var(--red-color)'>${format(this.heatMultiplier().multiply(pulse).multiply(pulse.plus(1)))}</span><br>`
         return output
     }
