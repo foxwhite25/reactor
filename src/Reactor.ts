@@ -46,6 +46,12 @@ window.addEventListener('load', () => {
 });
 
 export const tick = (): boolean => {
+    Globals.ticks += 1
+    if (Globals.ticks % (10 - player.upgrades[UpgradeEnum.Chronomancy].count) != 0) {
+        return false
+    }
+    Globals.ticks = 0
+
     Globals.stats.power = new Decimal(0)
     Globals.stats.heat = new Decimal(0)
     Globals.vents.length = 0

@@ -34,6 +34,7 @@ export const Globals: GlobalVariables = {
     mapHeight: 17,
     offsetCol: [0, 0, 1, -1],
     offsetRow: [1, -1, 0, 0],
+    ticks: 0,
 
     maxPower: new Decimal(50000),
     maxHeat: new Decimal(50000),

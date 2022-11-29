@@ -137,7 +137,11 @@ function setupUpgrades() {
 
         const desc = document.createElement('span')
         desc.className = 'upgrade-desc'
-        desc.innerText = upgrade.title + ' ' + format(upgrade.count)
+        let innerText = upgrade.title + ' ' + format(upgrade.count);
+        if (upgrade.max != -1) {
+            innerText += '/' + format(upgrade.max)
+        }
+        desc.innerText = innerText
         desc.id = `upgrade-desc-${upgrade.id}`
         u.append(desc)
 
@@ -309,14 +313,13 @@ export const htmlInserts = (): void => {
 
 export const tileTooltip = (row: number, col: number): void => {
     const tile = player.tiles[row][col]
-    if (tile.id == '') {
-        return
+    if (tile.id != '') {
+        Globals.tooltipFunction = () => {
+            const tile = player.tiles[row][col];
+            return {title: tile.title, content: tile.info(row, col)}
+        }
+        showTooltip()
     }
-    Globals.tooltipFunction = () => {
-        const tile = player.tiles[row][col];
-        return {title: tile.title, content: tile.info(row, col)}
-    }
-    showTooltip()
 };
 
 export const componentTooltip = (component: Component): void => {
@@ -335,7 +338,7 @@ export const upgradeTooltip = (upgrade: BaseUpgrade, t: 'posMax' | 'pos' | 'neg'
             switch (t) {
                 case 'posMax': {
                     const numberToBuy = upgrade.getMaxNumber(player.money);
-                    if (numberToBuy == 0) {
+                    if (numberToBuy == 0 && upgrade.max != upgrade.count) {
                         return `Cost: <span style='color: var(--red-color)'>${format(upgrade.getSingleCost())}$</span>`;
                     }
                     return `Cost: <span style='color: var(--green-color)'>${format(upgrade.getBulkCost(numberToBuy))}$</span> (+${format(numberToBuy)})`;
@@ -381,13 +384,17 @@ export const hideTooltip = (): void => {
 export const processComponentQue = (): void => {
     let lastX = 0
     let lastY = 0
+    let exist = false
     Globals.componentQue.map((componentSet) => {
         const c = componentSet.coordinate;
         const component = componentSet.component;
         player.tiles[c.row][c.col] = getTileByComponent(component);
         lastX = c.row
         lastY = c.col
+        exist = true
     })
-    tileTooltip(lastX, lastY)
-    Globals.componentQue = [];
+    if (exist) {
+        tileTooltip(lastX, lastY)
+    }
+    Globals.componentQue.length = 0;
 };

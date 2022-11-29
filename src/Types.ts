@@ -28,6 +28,7 @@ export interface GlobalVariables {
     mapHeight: number,
     offsetCol: number[],
     offsetRow: number[],
+    ticks: number,
 
     maxPower: Decimal
     maxHeat: Decimal

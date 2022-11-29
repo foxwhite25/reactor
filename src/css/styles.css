@@ -557,6 +557,7 @@ div.nuke.burn.b::before {
     align-items: start;
     justify-content: center;
     margin-top: 10px;
+    text-align: center;
 }
 
 #upgrades-table-container {
@@ -566,8 +567,7 @@ div.nuke.burn.b::before {
     flex-direction: column;
     flex-wrap: nowrap;
     min-height: 350px;
-    padding: 10px;
-    margin-top: 10px;
+    margin: 10px;
     font-size: 0;
 }
 
@@ -584,7 +584,7 @@ div.nuke.burn.b::before {
 .upgrade-container {
     z-index: 1;
     display: flex;
-    width: 50%;
+    width: 48%;
     padding: 12px;
     font-size: medium;
 }
@@ -616,25 +616,25 @@ div.nuke.burn.b::before {
 }
 
 .upgrade-max {
-    width: 5em;
+    width: 4.5em;
     margin: 0 auto;
     border: 2px var(--green-color) solid;
 }
 
 .upgrade-pos {
-    width: 4em;
+    width: 3.5em;
     margin: 0 auto;
     border: 2px var(--green-color) solid;
 }
 
 .upgrade-min {
-    width: 5em;
+    width: 4.5em;
     margin: 0 auto;
     border: 2px var(--red-color) solid;
 }
 
 .upgrade-neg {
-    width: 4em;
+    width: 3.5em;
     margin: 0 auto;
     border: 2px var(--red-color) solid;
 }

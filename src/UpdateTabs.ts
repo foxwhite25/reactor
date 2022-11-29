@@ -27,7 +27,11 @@ export const visualUpdateUpgrades = (): void => {
         return;
     }
     player.upgrades.map((upgrade) => {
-        DOMCacheGetOrSet(`upgrade-desc-${upgrade.id}`).innerText = upgrade.title + ' ' + format(upgrade.count)
+        let innerText = upgrade.title + ' ' + format(upgrade.count);
+        if (upgrade.max != -1) {
+            innerText += '/' + format(upgrade.max)
+        }
+        DOMCacheGetOrSet(`upgrade-desc-${upgrade.id}`).innerText = innerText
         DOMCacheGetOrSet(`upgrade-pos-${upgrade.id}`).innerText = `+${getKeyMultiplier()}`
         DOMCacheGetOrSet(`upgrade-neg-${upgrade.id}`).innerText = `-${getKeyMultiplier()}`
     })
